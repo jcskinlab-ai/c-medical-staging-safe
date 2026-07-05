@@ -1556,37 +1556,61 @@ function RefNewAppointment({ setView }) {
   );
 }
 
+const MEDIQUE_EXACT_SCREENS = {
+  home: {
+    src: "/assets/medique-mobile-ref-citas.webp?v=1",
+    label: "Citas"
+  },
+  agenda: {
+    src: "/assets/medique-mobile-ref-agenda.webp?v=1",
+    label: "Agenda"
+  },
+  new: {
+    src: "/assets/medique-mobile-ref-nueva.webp?v=1",
+    label: "Nueva cita"
+  }
+};
+
+function MediqueHotspot({ className, label, onClick }) {
+  return <button type="button" className={"medique-hotspot " + className} aria-label={label} onClick={onClick} />;
+}
+
 function MediqueEnterpriseMobile({ T }) {
   const [view, setView] = useState("home");
-  const mainRef = useRef(null);
-  useEffect(() => {
-    if (mainRef.current) mainRef.current.scrollTop = 0;
-  }, [view]);
-  const bg = {
-    minHeight:"100dvh",
-    backgroundImage:"linear-gradient(180deg, rgba(5,18,38,.16), rgba(5,18,38,.38) 44%, rgba(5,18,38,.68)), url('/assets/everest-mobile.jpg?v=7')",
-    backgroundSize:"cover",
-    backgroundPosition:"center top",
-    backgroundRepeat:"no-repeat",
-    backgroundColor:"#07182E",
-    display:"flex",
-    justifyContent:"center",
-    fontFamily:SF,
-    color:REF_TEXT
-  };
+  const screen = MEDIQUE_EXACT_SCREENS[view] || MEDIQUE_EXACT_SCREENS.home;
+  const goHome = () => setView("home");
+  const goAgenda = () => setView("agenda");
+  const goNew = () => setView("new");
+
   return (
-    <div className="medique-stage" style={bg}>
-      <div className="medique-phone-shell">
-      <div className="medique-screen jc-scroll">
-        <div style={{ padding:"calc(10px + env(safe-area-inset-top,0px)) 10px 0" }}>
-          <RefTopStatus />
-          <RefHeader view={view} setView={setView} />
-        </div>
-        <main ref={mainRef} className="jc-scroll" style={{ flex:1, paddingBottom:8, overflowY:"auto", overflowX:"hidden" }}>
-          {view === "agenda" ? <RefAgenda setView={setView} /> : view === "new" ? <RefNewAppointment setView={setView} /> : <RefDashboard setView={setView} />}
-        </main>
-        <RefBottomNav view={view} setView={setView} />
-      </div>
+    <div className="medique-ref-stage">
+      <div className="medique-ref-frame" aria-label={"Medique panel móvil - " + screen.label}>
+        <img className="medique-ref-image" src={screen.src} alt={"Medique panel móvil - " + screen.label} draggable={false} />
+
+        {view === "home" && (
+          <>
+            <MediqueHotspot className="agenda-cta" label="Ver agenda" onClick={goAgenda} />
+            <MediqueHotspot className="nav-agenda" label="Agenda" onClick={goAgenda} />
+            <MediqueHotspot className="new-cta" label="Nueva cita" onClick={goNew} />
+          </>
+        )}
+
+        {view === "agenda" && (
+          <>
+            <MediqueHotspot className="nav-citas" label="Citas" onClick={goHome} />
+            <MediqueHotspot className="fab-new" label="Nueva cita" onClick={goNew} />
+          </>
+        )}
+
+        {view === "new" && (
+          <>
+            <MediqueHotspot className="back-new" label="Volver" onClick={goHome} />
+            <MediqueHotspot className="close-new" label="Cerrar" onClick={goHome} />
+            <MediqueHotspot className="cancel-new" label="Cancelar" onClick={goHome} />
+            <MediqueHotspot className="nav-citas" label="Citas" onClick={goHome} />
+            <MediqueHotspot className="nav-agenda" label="Agenda" onClick={goAgenda} />
+          </>
+        )}
       </div>
     </div>
   );

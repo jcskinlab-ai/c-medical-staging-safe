@@ -1036,25 +1036,30 @@ function RefNewAppointment({ setView }) {
   const label = (t) => /* @__PURE__ */ React.createElement("div", { style: { color: REF_TEXT, fontSize: 20, fontWeight: 500, margin: "19px 0 9px" } }, t);
   return /* @__PURE__ */ React.createElement("div", { style: { padding: "0 16px 0" } }, /* @__PURE__ */ React.createElement("div", { style: { display: "grid", gridTemplateColumns: "1fr 1fr 1fr", alignItems: "start", margin: "6px 70px 22px", position: "relative" } }, /* @__PURE__ */ React.createElement("div", { style: { position: "absolute", top: 19, left: "17%", right: "17%", height: 1, background: "rgba(255,255,255,.18)" } }), ["Paciente", "Detalles", "Confirmar"].map((t, i) => /* @__PURE__ */ React.createElement("div", { key: t, style: { position: "relative", zIndex: 1, textAlign: "center", color: i === 0 ? REF_TEXT : REF_MUTED } }, /* @__PURE__ */ React.createElement("span", { style: { margin: "0 auto 11px", width: 42, height: 42, borderRadius: "50%", display: "grid", placeItems: "center", background: i === 0 ? "linear-gradient(180deg,#4A91FF,#235EE4)" : "rgba(255,255,255,.16)", fontSize: 19, fontWeight: 800, boxShadow: i === 0 ? "0 12px 22px rgba(47,123,255,.32)" : "none" } }, i + 1), /* @__PURE__ */ React.createElement("span", { style: { fontSize: 16 } }, t)))), label("Buscar paciente"), field(/* @__PURE__ */ React.createElement(RefIcon, { type: "search", size: 28 }), "Buscar por nombre, RUT o tel\xE9fono", /* @__PURE__ */ React.createElement(RefIcon, { type: "users", size: 24 })), /* @__PURE__ */ React.createElement(RefGlass, { style: { borderRadius: 14, height: 88, marginTop: 20 } }, /* @__PURE__ */ React.createElement("span", { style: { height: "100%", display: "flex", alignItems: "center", gap: 18, padding: "0 20px" } }, /* @__PURE__ */ React.createElement("span", { style: { width: 58, height: 58, borderRadius: "50%", display: "grid", placeItems: "center", background: "linear-gradient(180deg,#4A91FF,#235EE4)", color: "#fff" } }, /* @__PURE__ */ React.createElement(RefIcon, { type: "user", size: 30 })), /* @__PURE__ */ React.createElement("span", { style: { flex: 1, minWidth: 0 } }, /* @__PURE__ */ React.createElement("strong", { style: { display: "block", color: REF_TEXT, fontSize: 19, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" } }, "Karen Sof\xEDa Baeza Arellano"), /* @__PURE__ */ React.createElement("span", { style: { color: REF_MUTED, fontSize: 16, marginTop: 5, display: "block" } }, "21.365.478-6 \xB7 +56 9 1234 5678")), /* @__PURE__ */ React.createElement(RefIcon, { type: "chev", size: 26 }))), label("Procedimiento"), field(/* @__PURE__ */ React.createElement("span", { style: { width: 38, height: 38, borderRadius: 9, display: "grid", placeItems: "center", background: "rgba(47,123,255,.24)" } }, /* @__PURE__ */ React.createElement(RefIcon, { type: "flame", size: 22 })), "Quemadores de grasa localizada"), label("Fecha"), field(/* @__PURE__ */ React.createElement(RefIcon, { type: "calendar", size: 28 }), "Viernes, 4 de julio de 2026"), /* @__PURE__ */ React.createElement("div", { style: { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 32 } }, /* @__PURE__ */ React.createElement("div", null, label("Hora de inicio"), field(/* @__PURE__ */ React.createElement(RefIcon, { type: "clock", size: 28 }), "11:00")), /* @__PURE__ */ React.createElement("div", null, label("Duraci\xF3n"), field(/* @__PURE__ */ React.createElement(RefIcon, { type: "hourglass", size: 28 }), "45 min"))), label("Notas (opcional)"), field(/* @__PURE__ */ React.createElement(RefIcon, { type: "note", size: 25 }), "Ej. Control, seguimiento, evaluaci\xF3n...", /* @__PURE__ */ React.createElement("span", { style: { color: REF_MUTED } }, "0/200")), /* @__PURE__ */ React.createElement(RefGlass, { style: { borderRadius: 13, height: 76, marginTop: 27 } }, /* @__PURE__ */ React.createElement("span", { style: { height: "100%", display: "flex", alignItems: "center", gap: 18, padding: "0 22px", fontSize: 17 } }, /* @__PURE__ */ React.createElement("span", { style: { width: 42, height: 42, borderRadius: "50%", display: "grid", placeItems: "center", background: "linear-gradient(180deg,#4A91FF,#235EE4)", color: "#fff", fontWeight: 900 } }, "i"), /* @__PURE__ */ React.createElement("span", { style: { width: 1, height: 38, background: "rgba(255,255,255,.16)" } }), /* @__PURE__ */ React.createElement("span", { style: { color: REF_MUTED } }, "Pago pendiente de evaluaci\xF3n: ", /* @__PURE__ */ React.createElement("b", { style: { color: "#82B9FF" } }, "$15.000")))), /* @__PURE__ */ React.createElement("button", { style: { marginTop: 28, width: "100%", height: 70, border: 0, borderRadius: 14, background: "linear-gradient(180deg,#4A91FF,#235EE4)", color: "#fff", fontFamily: SF, fontSize: 21, fontWeight: 800, boxShadow: "0 22px 42px rgba(35,94,228,.28)" } }, "Continuar"), /* @__PURE__ */ React.createElement("button", { onClick: () => setView("home"), style: { width: "100%", height: 58, border: 0, background: "transparent", color: "#fff", fontFamily: SF, fontSize: 19, fontWeight: 650 } }, "Cancelar"));
 }
+const MEDIQUE_EXACT_SCREENS = {
+  home: {
+    src: "/assets/medique-mobile-ref-citas.webp?v=1",
+    label: "Citas"
+  },
+  agenda: {
+    src: "/assets/medique-mobile-ref-agenda.webp?v=1",
+    label: "Agenda"
+  },
+  new: {
+    src: "/assets/medique-mobile-ref-nueva.webp?v=1",
+    label: "Nueva cita"
+  }
+};
+function MediqueHotspot({ className, label, onClick }) {
+  return /* @__PURE__ */ React.createElement("button", { type: "button", className: "medique-hotspot " + className, "aria-label": label, onClick });
+}
 function MediqueEnterpriseMobile({ T }) {
   const [view, setView] = useState("home");
-  const mainRef = useRef(null);
-  useEffect(() => {
-    if (mainRef.current) mainRef.current.scrollTop = 0;
-  }, [view]);
-  const bg = {
-    minHeight: "100dvh",
-    backgroundImage: "linear-gradient(180deg, rgba(5,18,38,.16), rgba(5,18,38,.38) 44%, rgba(5,18,38,.68)), url('/assets/everest-mobile.jpg?v=7')",
-    backgroundSize: "cover",
-    backgroundPosition: "center top",
-    backgroundRepeat: "no-repeat",
-    backgroundColor: "#07182E",
-    display: "flex",
-    justifyContent: "center",
-    fontFamily: SF,
-    color: REF_TEXT
-  };
-  return /* @__PURE__ */ React.createElement("div", { className: "medique-stage", style: bg }, /* @__PURE__ */ React.createElement("div", { className: "medique-phone-shell" }, /* @__PURE__ */ React.createElement("div", { className: "medique-screen jc-scroll" }, /* @__PURE__ */ React.createElement("div", { style: { padding: "calc(10px + env(safe-area-inset-top,0px)) 10px 0" } }, /* @__PURE__ */ React.createElement(RefTopStatus, null), /* @__PURE__ */ React.createElement(RefHeader, { view, setView })), /* @__PURE__ */ React.createElement("main", { ref: mainRef, className: "jc-scroll", style: { flex: 1, paddingBottom: 8, overflowY: "auto", overflowX: "hidden" } }, view === "agenda" ? /* @__PURE__ */ React.createElement(RefAgenda, { setView }) : view === "new" ? /* @__PURE__ */ React.createElement(RefNewAppointment, { setView }) : /* @__PURE__ */ React.createElement(RefDashboard, { setView })), /* @__PURE__ */ React.createElement(RefBottomNav, { view, setView }))));
+  const screen = MEDIQUE_EXACT_SCREENS[view] || MEDIQUE_EXACT_SCREENS.home;
+  const goHome = () => setView("home");
+  const goAgenda = () => setView("agenda");
+  const goNew = () => setView("new");
+  return /* @__PURE__ */ React.createElement("div", { className: "medique-ref-stage" }, /* @__PURE__ */ React.createElement("div", { className: "medique-ref-frame", "aria-label": "Medique panel m\xF3vil - " + screen.label }, /* @__PURE__ */ React.createElement("img", { className: "medique-ref-image", src: screen.src, alt: "Medique panel m\xF3vil - " + screen.label, draggable: false }), view === "home" && /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement(MediqueHotspot, { className: "agenda-cta", label: "Ver agenda", onClick: goAgenda }), /* @__PURE__ */ React.createElement(MediqueHotspot, { className: "nav-agenda", label: "Agenda", onClick: goAgenda }), /* @__PURE__ */ React.createElement(MediqueHotspot, { className: "new-cta", label: "Nueva cita", onClick: goNew })), view === "agenda" && /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement(MediqueHotspot, { className: "nav-citas", label: "Citas", onClick: goHome }), /* @__PURE__ */ React.createElement(MediqueHotspot, { className: "fab-new", label: "Nueva cita", onClick: goNew })), view === "new" && /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement(MediqueHotspot, { className: "back-new", label: "Volver", onClick: goHome }), /* @__PURE__ */ React.createElement(MediqueHotspot, { className: "close-new", label: "Cerrar", onClick: goHome }), /* @__PURE__ */ React.createElement(MediqueHotspot, { className: "cancel-new", label: "Cancelar", onClick: goHome }), /* @__PURE__ */ React.createElement(MediqueHotspot, { className: "nav-citas", label: "Citas", onClick: goHome }), /* @__PURE__ */ React.createElement(MediqueHotspot, { className: "nav-agenda", label: "Agenda", onClick: goAgenda }))));
 }
 function MobileShell({ T, D, onLogout }) {
   return /* @__PURE__ */ React.createElement(MediqueEnterpriseMobile, { T });
