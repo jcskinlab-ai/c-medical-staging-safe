@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Agenda tu cita — JC Medical · Medicina estética en Talca</title>
+<meta name="description" content="Reserva tu evaluación o tratamiento de medicina estética en Talca: elige procedimiento, fecha y hora. Confirmación inmediata por WhatsApp. JC Medical · SKINLAB.">
+<meta name="robots" content="index, follow">
+<meta name="theme-color" content="#F5F2EC">
+<link rel="canonical" href="https://medique.cl/agendar.html">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="es_CL">
+<meta property="og:site_name" content="JC Medical · SKINLAB">
+<meta property="og:title" content="Agenda tu cita — JC Medical, Talca">
+<meta property="og:description" content="Elige procedimiento, fecha y hora. Confirmación inmediata por WhatsApp.">
+<meta property="og:url" content="https://medique.cl/agendar.html">
+<meta property="og:image" content="https://medique.cl/assets/jc-hero-v2.png">
+<meta name="twitter:card" content="summary_large_image">
+<!-- optimize: preconnect a las fuentes -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Cormorant+Garamond:ital,wght@0,400;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#F5F2EC;--surface:#fff;--surface2:#FBF9F5;--ink:#1A1A14;--mute:#5C5A50;--faint:#8A8674;--line:rgba(20,20,15,.12);--accent:#54707F;--accent-deep:#3f5663;--ok:#1F8A5B;--danger:#C0285A;--ease:cubic-bezier(.22,1,.36,1)}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Jost',sans-serif;background:var(--bg);color:var(--ink);min-height:100dvh;padding:32px 20px 96px;-webkit-tap-highlight-color:transparent}
+  .wrap{width:100%;max-width:680px;margin:0 auto}
+  .badge{width:52px;height:52px;border-radius:14px;background:rgba(84,112,127,.12);display:flex;align-items:center;justify-content:center;margin:0 auto 14px}
+  h1{font-family:'Marcellus';font-weight:400;font-size:clamp(28px,8vw,34px);text-align:center;line-height:1.12;letter-spacing:-.01em}
+  h1 em{font-family:'Cormorant Garamond';font-style:italic;color:var(--accent)}
+  .sub{color:var(--mute);font-size:14px;font-weight:300;margin-top:10px;line-height:1.6;text-align:center}
+  .step{display:none}
+  .step.active{display:block;animation:fade .3s var(--ease)}
+  @keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  @keyframes pop{from{transform:scale(.3);opacity:0}to{transform:scale(1);opacity:1}}
+  .sech{font-family:'Marcellus';font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);background:rgba(84,112,127,.10);border-radius:10px;padding:11px 15px;margin:20px 0 10px}
+  .cat-label{font-family:'Jost';font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);padding:12px 4px 6px}
+  .svc-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .svc-card{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 14px 12px;cursor:pointer;transition:border-color .15s,background .15s,transform .12s}
+  .svc-card:hover{border-color:var(--accent)}
+  .svc-card:active{transform:scale(.985)}
+  .svc-card.incart{border-color:var(--accent);background:rgba(84,112,127,.07)}
+  .svc-card .svc-name{font-size:13.5px;font-weight:500;color:var(--ink);line-height:1.35;margin-bottom:5px;padding-right:26px}
+  .svc-card .svc-price{font-family:'Marcellus';font-size:14px;color:var(--accent)}
+  .svc-card .svc-meta{font-size:11px;color:var(--faint);margin-top:3px;line-height:1.4}
+  .svc-card .svc-dur{display:inline-flex;align-items:center;gap:4px;font-size:10.5px;color:var(--mute);margin-top:7px;background:var(--surface2);border:1px solid var(--line);border-radius:999px;padding:3px 9px}
+  .svc-add{position:absolute;top:11px;right:11px;width:26px;height:26px;border-radius:8px;background:var(--surface2);border:1px solid var(--line);color:var(--accent);display:flex;align-items:center;justify-content:center;font-size:18px;line-height:1;transition:.15s var(--ease)}
+  .svc-card.incart .svc-add{background:var(--accent);border-color:var(--accent);color:#fff;animation:pop .25s var(--ease)}
+  /* Carrito "Tu selección" */
+  .cart{background:var(--surface);border:1px solid rgba(84,112,127,.3);border-radius:16px;padding:16px 16px 14px;margin-bottom:6px;box-shadow:0 14px 40px -28px rgba(40,38,30,.4)}
+  .cart-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px}
+  .cart-head .ct{font-family:'Jost';font-size:10px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
+  .cart-head .cm{font-size:11px;color:var(--mute)}
+  .cart-item{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--line)}
+  .cart-item:last-of-type{border-bottom:none}
+  .ci-info{flex:1;min-width:0}
+  .ci-name{font-size:13.5px;font-weight:500;color:var(--ink);line-height:1.3}
+  .ci-meta{font-size:11px;color:var(--faint);margin-top:2px}
+  .qty{display:flex;align-items:center;gap:0;border:1px solid var(--line);border-radius:9px;overflow:hidden;flex-shrink:0}
+  .qty button{width:32px;height:32px;background:var(--surface2);border:none;color:var(--accent);font-size:17px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center}
+  .qty button:active{background:rgba(84,112,127,.16)}
+  .qty .qn{min-width:26px;text-align:center;font-size:14px;font-weight:600;color:var(--ink)}
+  .cart-tot{display:flex;justify-content:space-between;align-items:center;margin-top:12px;padding-top:11px;border-top:1px solid var(--line)}
+  .cart-tot .tl{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--mute)}
+  .cart-tot .tv{font-family:'Marcellus';font-size:19px;color:var(--accent)}
+  .cart-time{font-size:11.5px;color:var(--mute);margin-top:6px;text-align:right}
+  .cart-empty{font-size:12.5px;color:var(--faint);text-align:center;padding:4px 0 2px}
+  .date-scroll{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;margin-bottom:16px;scrollbar-width:none}
+  .date-scroll::-webkit-scrollbar{display:none}
+  .date-btn{flex-shrink:0;min-width:64px;padding:12px 8px;border-radius:12px;cursor:pointer;text-align:center;background:var(--surface);border:1px solid var(--line);transition:all .15s}
+  .date-btn:hover{border-color:var(--accent)}
+  .date-btn.sel{background:var(--accent);border-color:var(--accent)}
+  .date-btn .dwd{font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--faint)}
+  .date-btn.sel .dwd{color:rgba(255,255,255,.7)}
+  .date-btn .ddd{font-family:'Marcellus';font-size:22px;color:var(--ink);margin:2px 0}
+  .date-btn.sel .ddd{color:#fff}
+  .date-btn .dmm{font-size:10px;color:var(--mute)}
+  .date-btn.sel .dmm{color:rgba(255,255,255,.7)}
+  .time-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-top:6px}
+  @media(min-width:400px){.time-grid{grid-template-columns:repeat(5,1fr)}}
+  .time-btn{padding:10px 4px;border-radius:8px;cursor:pointer;text-align:center;background:var(--surface);border:1px solid var(--line);font-size:13px;color:var(--ink);font-family:'Jost';transition:all .15s}
+  .time-btn:hover{border-color:var(--accent)}
+  .time-btn.sel{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600}
+  .time-empty{font-family:'Jost';font-size:13px;color:var(--faint);padding:14px 0;text-align:center}
+  .time-note{font-size:11.5px;color:var(--mute);margin-top:12px;text-align:center}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:24px 22px;margin-top:10px;box-shadow:0 16px 46px -28px rgba(40,38,30,.35)}
+  .q+.q{margin-top:22px}
+  .lbl{display:block;font-size:15px;font-weight:500;color:var(--ink);margin-bottom:10px}
+  .lbl .star{color:var(--danger);margin-left:3px}
+  .lbl .opt{color:var(--faint);font-weight:400;font-size:12px;margin-left:6px}
+  input[type=text],input[type=email],input[type=number]{width:100%;font-family:'Jost';font-size:15px;padding:14px 15px;border:1px solid var(--line);border-radius:11px;background:var(--surface2);color:var(--ink);outline:none;transition:border-color .15s}
+  input:focus{border-color:var(--accent);background:#fff}
+  input.err{border-color:var(--danger)}
+  .errmsg{font-size:11.5px;color:var(--danger);margin-top:6px;display:none}
+  .errmsg.show{display:block}
+  .summ-card{background:var(--surface);border:1px solid rgba(84,112,127,.3);border-radius:14px;padding:18px 18px;margin-top:10px}
+  .summ-row{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;padding:8px 0;border-bottom:1px solid var(--line)}
+  .summ-row:last-child{border-bottom:none}
+  .summ-k{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--mute);flex-shrink:0;padding-top:2px}
+  .summ-v{font-size:13.5px;font-weight:500;color:var(--ink);text-align:right;line-height:1.5}
+  .price-highlight{font-family:'Marcellus';font-size:18px;color:var(--accent)}
+  .consent{display:flex;align-items:flex-start;gap:13px;padding:14px 15px;border:1px solid var(--line);border-radius:11px;background:var(--surface2);cursor:pointer;margin-top:14px;transition:border-color .15s}
+  .consent:hover{border-color:var(--accent)}
+  .consent input{margin-top:3px;flex-shrink:0;width:17px;height:17px;accent-color:var(--accent);cursor:pointer}
+  .consent .ctxt{font-size:13.5px;color:var(--mute);line-height:1.5}
+  .consent.err-consent{border-color:var(--danger)}
+  .footer{position:fixed;bottom:0;left:0;right:0;background:rgba(245,242,236,.96);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-top:1px solid var(--line);padding:12px 20px env(safe-area-inset-bottom,0);display:flex;align-items:center;gap:10px;z-index:50}
+  button.nav{font-family:'Jost';font-size:14px;font-weight:600;letter-spacing:.04em;border-radius:11px;padding:14px 20px;cursor:pointer;transition:opacity .15s,transform .15s;border:none}
+  button.nav:active{transform:scale(.97)}
+  .btn-prim{background:var(--ink);color:var(--bg)}
+  .btn-ghost{background:transparent;color:var(--mute);border:1px solid var(--line)!important}
+  .btn-prim:disabled{opacity:.4;cursor:not-allowed}
+  .prog{flex:1;display:flex;align-items:center;gap:8px;justify-content:flex-end;font-size:11px;color:var(--faint)}
+  .bar{flex:1;max-width:140px;height:4px;border-radius:999px;background:var(--line);overflow:hidden}
+  .bar i{display:block;height:100%;background:var(--accent);transition:width .35s var(--ease)}
+  .ok-box{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:40px 24px;text-align:center;box-shadow:0 16px 46px -28px rgba(40,38,30,.35)}
+  .ok-ic{width:60px;height:60px;border-radius:50%;background:rgba(31,138,91,.12);display:flex;align-items:center;justify-content:center;margin:0 auto 14px}
+  .ok-box h2{font-family:'Marcellus';font-weight:400;font-size:25px;color:var(--ink)}
+  .ok-sub{color:var(--mute);font-size:13px;margin-top:8px;line-height:1.6}
+  .ok-data{background:rgba(31,138,91,.07);border:1px solid rgba(31,138,91,.25);border-radius:12px;padding:14px 16px;margin-top:18px;text-align:left}
+  .ok-row{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;padding:6px 0;border-bottom:1px solid rgba(31,138,91,.15);font-size:13px}
+  .ok-row:last-child{border-bottom:none}
+  .ok-row .k{color:var(--mute);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;flex-shrink:0;padding-top:2px}
+  .ok-row .v{font-weight:500;color:var(--ink);text-align:right;line-height:1.5}
+  .wa-btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;margin-top:16px;padding:16px;background:#1F8A5B;color:#fff;border:none;border-radius:13px;font-family:'Jost';font-size:15px;font-weight:600;cursor:pointer;text-decoration:none;transition:opacity .15s}
+  .wa-btn:active{opacity:.85}
+  .link-btn{margin-top:12px;width:100%;padding:12px;border:1px solid var(--line);border-radius:11px;background:transparent;font-family:'Jost';font-size:13px;color:var(--mute);cursor:pointer}
+  .hide{display:none!important}
+  /* clarify: aviso suave (en vez de alert nativo) */
+  .toast{position:fixed;left:50%;bottom:84px;transform:translate(-50%,12px);z-index:60;background:var(--ink);color:var(--bg);font-size:13px;font-weight:500;padding:12px 20px;border-radius:999px;opacity:0;pointer-events:none;transition:opacity .3s var(--ease),transform .3s var(--ease);box-shadow:0 12px 30px -10px rgba(0,0,0,.4);max-width:90%;text-align:center}
+  .toast.show{opacity:1;transform:translate(-50%,0)}
+  @media(max-width:600px){
+    body{padding:20px 14px 92px}
+    .svc-grid{grid-template-columns:1fr}
+    .card{padding:18px 16px;border-radius:14px}
+    input[type=text],input[type=email],input[type=number]{font-size:16px;padding:15px}
+    button.nav{font-size:15px}
+  }
+  @media (prefers-reduced-motion: reduce){*{animation-duration:.001ms!important}.toast{transition:opacity .2s}}
+  @keyframes jcSlideUp{from{transform:translateY(60px);opacity:0}to{transform:translateY(0);opacity:1}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="badge">
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#54707F" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/>
+    </svg>
+  </div>
+  <h1>Agenda tu <em>cita</em></h1>
+  <div id="clinic-tag" style="display:none;margin:10px 0 0;font-family:'Marcellus',serif;font-size:19px;line-height:1.2;color:#1A1A14"></div>
+  <p class="sub">Elige uno o más tratamientos, tu hora y completa tus datos.<br>Te confirmamos de inmediato por WhatsApp.</p>
+
+  <!-- Steps wrapper — hidden on success -->
+  <div id="app-steps">
+
+    <!-- PASO 1: Servicios (carrito) -->
+    <div class="step active" id="s0">
+      <div class="sech">¿Qué tratamientos te interesan?</div>
+      <div id="cart-box"></div>
+      <div id="svc-list"></div>
+    </div>
+
+    <!-- PASO 2: Fecha y hora -->
+    <div class="step" id="s1">
+      <div class="sech">Elige tu fecha y hora</div>
+      <div class="date-scroll" id="date-list"></div>
+      <div id="time-area">
+        <div class="time-empty">Selecciona una fecha para ver los horarios disponibles</div>
+      </div>
+    </div>
+
+    <!-- PASO 3: Datos de contacto -->
+    <div class="step" id="s2">
+      <div class="sech">Tus datos de contacto</div>
+      <div class="card">
+        <div class="q">
+          <label class="lbl">Nombre completo<span class="star">*</span></label>
+          <input type="text" id="fname" placeholder="Tu respuesta" autocomplete="name">
+          <div class="errmsg">Ingresa tu nombre completo (mín. 3 caracteres).</div>
+        </div>
+        <div class="q">
+          <label class="lbl">RUT<span class="star">*</span></label>
+          <input type="text" id="frut" placeholder="Ej: 12.345.678-9" inputmode="numeric" data-nocap autocomplete="off">
+          <div class="errmsg">Ingresa tu RUT (ej: 12.345.678-9).</div>
+        </div>
+        <div class="q">
+          <label class="lbl">Edad<span class="star">*</span></label>
+          <input type="number" id="fage" placeholder="Tu edad" min="14" max="99" inputmode="numeric">
+          <div class="errmsg">Ingresa una edad válida (14–99 años).</div>
+        </div>
+        <div class="q">
+          <label class="lbl">Teléfono / WhatsApp<span class="star">*</span></label>
+          <input type="text" id="fphone" value="+56 9 " inputmode="tel" placeholder="+56 9 XXXX XXXX" autocomplete="tel">
+          <div class="errmsg">Ingresa tu número después del +56 9 (8 dígitos).</div>
+        </div>
+        <div class="q">
+          <label class="lbl">Correo electrónico<span class="opt">(opcional)</span></label>
+          <input type="email" id="femail" placeholder="tucorreo@ejemplo.com" inputmode="email" autocomplete="email">
+          <div class="errmsg">Revisa el formato del correo (o déjalo en blanco).</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PASO 4: Confirmar + datos bancarios -->
+    <div class="step" id="s3">
+      <div class="sech">Confirma tu reserva</div>
+      <div class="summ-card" id="summ"></div>
+
+      <!-- Datos bancarios para transferencia — los configura cada clínica en su panel (no van en el código) -->
+      <div id="pago-box" style="background:rgba(84,112,127,.05);border:1px solid rgba(84,112,127,.3);border-radius:14px;padding:18px 18px 14px;margin-top:14px;display:none">
+        <div style="font-family:'Marcellus';font-size:12px;letter-spacing:.13em;text-transform:uppercase;color:#54707F;margin-bottom:12px">Pago por transferencia</div>
+        <div id="pago-rows" style="display:grid;gap:7px"></div>
+        <div style="margin-top:12px;font-size:11.5px;color:#8A8674;line-height:1.6">Realiza la transferencia por el valor del tratamiento e incluye tu nombre como referencia. Luego toca el botón de abajo para enviarnos el comprobante.</div>
+      </div>
+      <div id="pago-fallback" style="background:rgba(84,112,127,.05);border:1px solid rgba(84,112,127,.3);border-radius:14px;padding:16px 18px;margin-top:14px;font-size:12.5px;color:#5C5A50;line-height:1.6;display:none">Al confirmar, te enviaremos los <b>datos de transferencia</b> por WhatsApp para coordinar el pago.</div>
+
+      <label class="consent" id="consent-wrap" style="margin-top:14px">
+        <input type="checkbox" id="fconsentimiento">
+        <span class="ctxt">Confirmo que los datos ingresados son correctos y acepto los <a href="/terminos" target="_blank" rel="noopener" style="color:var(--accent);text-decoration:underline">Términos de Servicio</a> y la <a href="/privacidad" target="_blank" rel="noopener" style="color:var(--accent);text-decoration:underline">Política de Privacidad</a>. Entiendo que mi hora quedará reservada una vez que se verifique el comprobante.</span>
+      </label>
+      <div class="errmsg" id="consent-err">Debes aceptar para continuar.</div>
+    </div>
+
+  </div><!-- /app-steps -->
+
+  <!-- Pantalla de éxito -->
+  <div id="done" class="hide">
+    <div class="ok-box">
+      <div class="ok-ic">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#1F8A5B" stroke-width="2.2"><path d="M20 6 9 17l-5-5"/></svg>
+      </div>
+      <h2>¡Casi listo!</h2>
+      <p class="ok-sub">Toca el botón para enviarnos tu comprobante de transferencia por WhatsApp. Revisaremos el pago y <strong>confirmaremos tu hora en máximo 15 minutos</strong>.</p>
+      <div class="ok-data" id="ok-data"></div>
+      <a id="wa-link" href="#" target="_blank" rel="noopener" class="wa-btn">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Enviar comprobante por WhatsApp
+      </a>
+      <!-- Después de tocar WA: mostrar mensaje de espera -->
+      <div id="espera-msg" class="hide" style="margin-top:14px;background:rgba(31,138,91,.07);border:1px solid rgba(31,138,91,.25);border-radius:12px;padding:14px 16px;text-align:left">
+        <div style="font-size:13px;font-weight:600;color:#1F8A5B;margin-bottom:4px">✓ Comprobante enviado</div>
+        <div style="font-size:12.5px;color:#5C5A50;line-height:1.6">Estamos revisando tu transferencia. <strong>Te confirmaremos por WhatsApp en máximo 15 minutos.</strong></div>
+      </div>
+      <button class="link-btn" onclick="reinit()">Agendar otra cita</button>
+    </div>
+  </div>
+
+</div><!-- /wrap -->
+
+<!-- Modal upsell: segundo procedimiento con 15% descuento -->
+<div id="upsell-overlay" class="hide" onclick="upsellClose()" style="position:fixed;inset:0;background:rgba(26,26,20,.52);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);z-index:80;display:flex;align-items:flex-end;justify-content:center;padding:0">
+  <div id="upsell-box" onclick="event.stopPropagation()" style="background:var(--bg);border-radius:24px 24px 0 0;border:1px solid var(--line);border-bottom:none;width:100%;max-width:680px;padding:28px 24px 40px;animation:jcSlideUp .35s var(--ease)">
+    <div style="text-align:center;margin-bottom:20px">
+      <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(84,112,127,.12);border-radius:999px;padding:7px 16px;margin-bottom:14px">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        <span style="font-family:'Jost';font-size:11px;font-weight:600;letter-spacing:.08em;color:var(--accent)">OFERTA ESPECIAL</span>
+      </div>
+      <h2 style="font-family:'Marcellus';font-weight:400;font-size:22px;color:var(--ink);margin-bottom:6px">Agrega un segundo procedimiento</h2>
+      <p style="font-size:13px;color:var(--mute);line-height:1.5">Por agendar hoy, tu próximo tratamiento tiene <strong>15% de descuento</strong>.</p>
+    </div>
+    <div style="margin-bottom:18px">
+      <label style="display:block;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--mute);margin-bottom:8px">Elige el procedimiento</label>
+      <select id="upsell-sel" onchange="upsellUpdatePrice()" style="width:100%;font-family:'Jost';font-size:14px;padding:14px 13px;border-radius:11px;border:1px solid var(--line);background:var(--surface);color:var(--ink);outline:none"></select>
+    </div>
+    <div id="upsell-price-row" class="hide" style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;padding:12px 15px;background:var(--surface2);border-radius:10px;border:1px solid var(--line)">
+      <div>
+        <div id="upsell-original" style="font-size:11.5px;color:var(--faint);text-decoration:line-through"></div>
+        <div id="upsell-discounted" style="font-family:'Marcellus';font-size:19px;color:var(--accent)"></div>
+      </div>
+      <div style="background:rgba(31,138,91,.12);border-radius:999px;padding:5px 12px;font-size:11px;font-weight:600;color:#1F8A5B">-15%</div>
+    </div>
+    <button onclick="upsellApply()" style="width:100%;font-family:'Jost';font-size:14px;font-weight:600;padding:16px;border-radius:12px;border:none;background:var(--ink);color:var(--bg);cursor:pointer;margin-bottom:10px">Agendar con 15% descuento</button>
+    <button onclick="upsellClose()" style="width:100%;font-family:'Jost';font-size:13px;font-weight:400;padding:12px;border-radius:12px;border:none;background:transparent;color:var(--mute);cursor:pointer">No gracias</button>
+  </div>
+</div>
+
+<!-- Barra de navegación fija -->
+<div class="footer" id="footer-nav">
+  <button class="nav btn-ghost" id="back-btn" style="display:none" onclick="navBack()">Atrás</button>
+  <button class="nav btn-prim" id="next-btn" onclick="navNext()">Siguiente</button>
+  <div class="prog">
+    <div class="bar"><i id="bar-fill" style="width:25%"></i></div>
+    <span id="page-lbl">1 de 4</span>
+  </div>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="jc-proto/jc-data.js?v=82"></script>
+<!-- Multi-clínica: si la URL trae ?c=clinicId, carga la marca/datos de esa clínica -->
+<script src="jcm_saas_config.js?v=7"></script>
+<script src="jcm_saas.js?v=26"></script>
+<script>
+(function(){
+  var DAYS   = ["Dom","Lun","Mar","Mié","Jue","Vie","Sáb"];
+  var MONTHS = ["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"];
+  var STEPS = 4, cur = 0;
+  var cart = [];        // [{ name, price }]  (cada unidad es un elemento; 2 Botox = 2 elementos)
+  var selDate = null;   // { date, wd, dd, mm }
+  var selTime = null;   // "HH:MM"
+
+  // Multi-clínica: marca/datos de la clínica activa (cuando la URL trae ?c=clinicId).
+  var CLINIC = null;
+  function applyClinic(p){
+    if(!p) return; CLINIC = p;
+    try{
+      document.title = 'Agenda tu cita — ' + (p.name || 'Clínica');
+      var tag = document.getElementById('clinic-tag');
+      if(tag && p.name){ tag.textContent = p.name; tag.style.display = 'block'; }
+      if(typeof buildServices === 'function') buildServices();
+      // Reconstruir fechas para aplicar los busySlots actualizados
+      if(typeof buildDates === 'function') buildDates();
+      renderPago();
+    }catch(e){}
+  }
+  // Rellena los datos de transferencia desde la config de la clínica. Si no hay datos,
+  // muestra el aviso de coordinar por WhatsApp (nunca una cuenta "quemada" en el código).
+  function renderPago(){
+    var box=document.getElementById('pago-box'), rows=document.getElementById('pago-rows'), fb=document.getElementById('pago-fallback');
+    if(!box||!rows||!fb) return;
+    var p=(CLINIC&&CLINIC.pago)||null;
+    var has=p&&(p.banco||p.titular||p.numero||p.rut);
+    if(!has){ box.style.display='none'; fb.style.display='block'; return; }
+    fb.style.display='none'; box.style.display='block';
+    function row(k,v){ return v ? "<div style=\"display:flex;justify-content:space-between;font-size:13px;padding:5px 0;border-bottom:1px solid rgba(20,20,15,.07)\"><span style=\"color:#5C5A50\">"+k+"</span><span style=\"font-weight:600;color:#1A1A14\">"+esc(v)+"</span></div>" : ""; }
+    rows.innerHTML = row('Banco',p.banco)+row('Titular',p.titular)+row('RUT',p.rut)+row('Tipo de cuenta',p.tipo)+row('N° de cuenta',p.numero)+row('Correo',p.email);
+  }
+  window.addEventListener('jcsaas:public', function(ev){ applyClinic(ev.detail && ev.detail.profile); });
+  try{ if(window.JCSAAS && window.JCSAAS.getPublic && window.JCSAAS.getPublic()) applyClinic(window.JCSAAS.getPublic()); }catch(e){}
+  renderPago(); // estado inicial: sin datos aún → muestra el aviso de WhatsApp
+
+  var steps   = [].slice.call(document.querySelectorAll('.step'));
+  var nextBtn = document.getElementById('next-btn');
+  var backBtn = document.getElementById('back-btn');
+  var barFill = document.getElementById('bar-fill');
+  var pageLbl = document.getElementById('page-lbl');
+  var toastEl = document.getElementById('toast');
+
+  /* ─── Helpers ─── */
+  function fmt(n){ return n > 0 ? "$" + n.toLocaleString("es-CL") : "A convenir"; }
+  function dKey(d){ return d.getFullYear()+"-"+("0"+(d.getMonth()+1)).slice(-2)+"-"+("0"+d.getDate()).slice(-2); }
+  function esc(s){ var d=document.createElement('div'); d.appendChild(document.createTextNode(s||'')); return d.innerHTML; }
+  // Duración (minutos) según el panel admin — fuente de verdad en jc-data.js
+  function procMin(name){ try{ return window.JCDATA.procMin(name); }catch(e){ return 30; } }
+  function fmtDur(min){ if(min<60) return min+" min"; var h=Math.floor(min/60), m=min%60; return m? h+" h "+m+" min" : h+" h"; }
+
+  var _toastT;
+  function showToast(msg){
+    if(!toastEl) return;
+    toastEl.textContent = msg; toastEl.classList.add('show');
+    clearTimeout(_toastT); _toastT = setTimeout(function(){ toastEl.classList.remove('show'); }, 2400);
+  }
+
+  function defaultSlots(wd){
+    var out = [], end = wd===6 ? 14 : 19;
+    for(var h=10;h<end;h++){
+      out.push((h<10?"0":"")+h+":00");
+      out.push((h<10?"0":"")+h+":30");
+    }
+    return out;
+  }
+  function getSlotsForDate(dateStr){
+    try{
+      // Fuente de verdad: los horarios que la clínica configuró en su PANEL (vienen en el
+      // perfil público). Respaldo a localStorage solo si el perfil aún no cargó.
+      var dates = (CLINIC && CLINIC.horariosDates) || JSON.parse(localStorage.getItem("jcm_horarios_dates")||"{}");
+      if(dates && dates[dateStr]) return dates[dateStr];
+      var d = new Date(dateStr+"T00:00:00"), wd = d.getDay();
+      var hor = (CLINIC && CLINIC.horarios) || JSON.parse(localStorage.getItem("jcm_horarios_v1")||"{}");
+      var h = hor && hor[wd];
+      if(h){ if(h.open===false) return []; return h.slots || defaultSlots(wd); }
+      if(wd === 0) return []; // domingo cerrado por defecto si no hay config
+      return defaultSlots(wd);
+    }catch(e){ return []; }
+  }
+
+  /* ─── Carrito ─── */
+  function cartTotalPrice(){ return cart.reduce(function(s,i){ return s + (i.price||0); }, 0); }
+  function cartTotalMin(){ return cart.reduce(function(s,i){ return s + procMin(i.name); }, 0); }
+  // Agrupado por nombre (para mostrar cantidades)
+  function cartGroups(){
+    var map = {}, order = [];
+    cart.forEach(function(i){
+      if(!map[i.name]){ map[i.name] = { name:i.name, price:i.price, qty:0 }; order.push(i.name); }
+      map[i.name].qty++;
+    });
+    return order.map(function(n){ return map[n]; });
+  }
+  window.addProc = function(name, price){
+    var wasEmpty = cart.length === 0;
+    cart.push({ name:name, price:price });
+    renderCart(); markCards();
+    showToast(name + " agregado");
+    if(wasEmpty && price > 0 && !_upsellShown && !/Evaluaci/i.test(name)){ _upsellShown = true; setTimeout(showUpsell, 450); }
+  };
+  window.incProc = function(name, price){ cart.push({ name:name, price:price }); renderCart(); markCards(); };
+  window.decProc = function(name){
+    for(var i=cart.length-1;i>=0;i--){ if(cart[i].name===name){ cart.splice(i,1); break; } }
+    renderCart(); markCards();
+  };
+
+  function renderCart(){
+    var box = document.getElementById('cart-box');
+    var groups = cartGroups();
+    if(!groups.length){ box.innerHTML=''; return; }
+    var rows = groups.map(function(g){
+      return '<div class="cart-item">'
+        + '<div class="ci-info"><div class="ci-name">'+esc(g.name)+'</div>'
+        + '<div class="ci-meta">'+fmt(g.price)+' · '+procMin(g.name)+' min c/u</div></div>'
+        + '<div class="qty">'
+        +   '<button type="button" aria-label="Quitar uno" onclick="decProc(\''+g.name.replace(/'/g,"\\'")+'\')">−</button>'
+        +   '<span class="qn">'+g.qty+'</span>'
+        +   '<button type="button" aria-label="Agregar uno" onclick="incProc(\''+g.name.replace(/'/g,"\\'")+'\','+g.price+')">+</button>'
+        + '</div></div>';
+    }).join('');
+    box.innerHTML = '<div class="cart">'
+      + '<div class="cart-head"><span class="ct">Tu selección</span><span class="cm">'+cart.length+' procedimiento'+(cart.length>1?'s':'')+'</span></div>'
+      + rows
+      + '<div class="cart-tot"><span class="tl">Total</span><span class="tv">'+fmt(cartTotalPrice())+'</span></div>'
+      + '<div class="cart-time">⏱ Tiempo estimado en clínica · '+fmtDur(cartTotalMin())+'</div>'
+      + '</div>';
+  }
+
+  function markCards(){
+    var counts = {};
+    cart.forEach(function(i){ counts[i.name]=(counts[i.name]||0)+1; });
+    [].forEach.call(document.querySelectorAll('.svc-card'), function(c){
+      var n = c.dataset.name, q = counts[n]||0;
+      c.classList.toggle('incart', q>0);
+      var add = c.querySelector('.svc-add');
+      if(add) add.textContent = q>0 ? q : '+';
+    });
+  }
+
+  /* ─── Paso 1: Servicios ─── */
+  function buildServices(){
+    var el = document.getElementById('svc-list');
+    var D  = window.JCDATA;
+    function card(name, price, meta, dur){
+      return '<div class="svc-card" data-name="'+esc(name)+'" data-price="'+price+'" onclick="addProc(this.dataset.name, parseInt(this.dataset.price,10)||0)">'
+        + '<span class="svc-add">+</span>'
+        + '<div class="svc-name">'+esc(name)+'</div>'
+        + '<div class="svc-price">'+fmt(price)+'</div>'
+        + (meta ? '<div class="svc-meta">'+esc(meta)+'</div>' : '')
+        + '<span class="svc-dur">⏱ '+(dur || procMin(name))+' min</span>'
+        + '</div>';
+    }
+    // Servicios PROPIOS de la clínica del enlace (?c=clinicId), publicados en su perfil.
+    // Si el enlace trae una clínica, se muestran SOLO sus servicios — NUNCA el catálogo de otra
+    // clínica, aunque su perfil aún no haya publicado la lista (en ese caso, lista vacía).
+    var clinicSvcs = CLINIC ? (Array.isArray(CLINIC.services) ? CLINIC.services : []) : null;
+    if (clinicSvcs) {
+      var h = '<div class="cat-label">Para empezar</div><div class="svc-grid">'
+        + card("Evaluación general", 15000, "Diagnóstico y plan personalizado") + '</div>';
+      if (!clinicSvcs.length) {
+        el.innerHTML = h + '<p style="color:var(--faint);font-size:12.5px;padding:12px 2px;line-height:1.5">Esta clínica aún no publicó su lista de servicios. Puedes solicitar una evaluación general y la clínica te orientará.</p>';
+        markCards(); return;
+      }
+      var byCat = {};
+      clinicSvcs.forEach(function(s){ var c = s.cat || 'Servicios'; (byCat[c] = byCat[c] || []).push(s); });
+      Object.keys(byCat).forEach(function(cat){
+        h += '<div class="cat-label">'+esc(cat)+'</div><div class="svc-grid">';
+        byCat[cat].forEach(function(s){ h += card(s.name, s.price || 0, s.desc || "", s.dur); });
+        h += '</div>';
+      });
+      el.innerHTML = h; markCards(); return;
+    }
+    // Sin clínica en el enlace (reserva directa de JC Medical o fallback): catálogo base.
+    if(!D || !D.catalog){
+      el.innerHTML='<p style="color:var(--faint);font-size:13px;padding:14px 0">Cargando servicios...</p>';
+      return;
+    }
+    var html = '<div class="cat-label">Para empezar</div><div class="svc-grid">'
+      + card("Evaluación general", 15000, "Diagnóstico y plan personalizado") + '</div>';
+    D.catalog.filter(function(s){ return s.sec !== "Promociones"; }).forEach(function(sec){
+      html += '<div class="cat-label">'+esc(sec.sec)+'</div>';
+      sec.groups.forEach(function(g){
+        if(sec.groups.length > 1)
+          html += '<div style="font-size:10px;color:var(--accent);font-weight:600;letter-spacing:.08em;padding:5px 2px 3px;text-transform:uppercase">'+esc(g.cat)+'</div>';
+        html += '<div class="svc-grid">';
+        g.items.slice(0,6).forEach(function(it){
+          var price = it.opts ? it.opts[0][1] : it.price;
+          html += card(it.n, price, it.t || "");
+        });
+        html += '</div>';
+      });
+    });
+    el.innerHTML = html;
+    markCards();
+  }
+
+  /* ─── Paso 2: Fechas ─── */
+  function futureSlotsForDate(ds, isToday){
+    var slots = getSlotsForDate(ds);
+    // Filtrar slots ocupados del perfil público de la clínica
+    var busy = (CLINIC && CLINIC.busySlots) || (window.DB && window.DB.get('busySlots')) || [];
+    var busySet = {};
+    busy.forEach(function(b){ if(b.fecha === ds) busySet[b.time] = true; });
+    slots = slots.filter(function(s){ return !busySet[s]; });
+    if(!isToday) return slots;
+    var now = new Date(), cutMins = now.getHours()*60 + now.getMinutes() + 30;
+    return slots.filter(function(s){ var p=s.split(':'); return parseInt(p[0])*60+parseInt(p[1]) >= cutMins; });
+  }
+  function buildDates(){
+    var el = document.getElementById('date-list');
+    el.innerHTML = '';
+    var base = new Date(), found = 0;
+    for(var i=0; i<=28 && found<14; i++){
+      var d = new Date(base);
+      d.setDate(base.getDate()+i);
+      var ds = dKey(d);
+      if(!futureSlotsForDate(ds, i===0).length) continue;
+      found++;
+      var wd = d.getDay();
+      var btn = document.createElement('div');
+      btn.className = 'date-btn' + (selDate && selDate.date===ds ? ' sel' : '');
+      btn.innerHTML = '<div class="dwd">'+(i===0?'Hoy':DAYS[wd])+'</div>'
+        +'<div class="ddd">'+d.getDate()+'</div>'
+        +'<div class="dmm">'+MONTHS[d.getMonth()]+'</div>';
+      btn.dataset.date = ds;
+      btn.dataset.wd   = String(wd);
+      btn.dataset.dd   = String(d.getDate());
+      btn.dataset.mm   = MONTHS[d.getMonth()];
+      btn.addEventListener('click', function(){ pickDate(this); });
+      el.appendChild(btn);
+    }
+    if(!found)
+      el.innerHTML = '<p style="color:var(--faint);font-size:13px;padding:8px 0">Sin fechas disponibles en los próximos días. Contáctanos por WhatsApp.</p>';
+    if(selDate && selTime) buildTimes(selDate.date);
+  }
+
+  window.pickDate = function(el){
+    [].forEach.call(document.querySelectorAll('.date-btn'), function(b){ b.classList.remove('sel'); });
+    el.classList.add('sel');
+    selDate = { date:el.dataset.date, wd:el.dataset.wd, dd:el.dataset.dd, mm:el.dataset.mm };
+    selTime = null;
+    buildTimes(el.dataset.date);
+  };
+
+  function buildTimes(dateStr){
+    var area = document.getElementById('time-area');
+    var slots = futureSlotsForDate(dateStr, dateStr === dKey(new Date()));
+    if(!slots.length){
+      area.innerHTML = '<div class="time-empty">Sin horarios disponibles para esta fecha</div>';
+      return;
+    }
+    var html = '<div style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--mute);margin-bottom:8px">Selecciona la hora de inicio</div>'
+      +'<div class="time-grid">';
+    slots.forEach(function(s){
+      html += '<div class="time-btn'+(selTime===s?' sel':'')+'" data-time="'+s+'" onclick="pickTime(this)">'+s+'</div>';
+    });
+    html += '</div>';
+    var min = cartTotalMin();
+    if(min) html += '<div class="time-note">Reserva una hora de inicio. Tu cita dura aprox. <strong>'+fmtDur(min)+'</strong>.</div>';
+    area.innerHTML = html;
+  }
+
+  window.pickTime = function(el){
+    [].forEach.call(document.querySelectorAll('.time-btn'), function(b){ b.classList.remove('sel'); });
+    el.classList.add('sel');
+    selTime = el.dataset.time;
+  };
+
+  /* ─── Teléfono: prefijo +56 9 fijo (no se puede borrar) ─── */
+  var PREFIX = "+56 9 ";
+  var phoneEl = document.getElementById('fphone');
+  function enforcePrefix(){
+    var v = phoneEl.value;
+    if(v.indexOf(PREFIX) !== 0){
+      // conservar solo los dígitos que el usuario escribió tras el prefijo
+      var digits = v.replace(/\D/g,'').replace(/^569?/, '');
+      phoneEl.value = PREFIX + digits;
+    }
+    // no permitir que el cursor entre en el prefijo
+    if(phoneEl.selectionStart < PREFIX.length){
+      try{ phoneEl.setSelectionRange(PREFIX.length, PREFIX.length); }catch(e){}
+    }
+  }
+  phoneEl.addEventListener('input', enforcePrefix);
+  phoneEl.addEventListener('focus', function(){ if(phoneEl.value.indexOf(PREFIX)!==0) phoneEl.value=PREFIX; setTimeout(function(){ if(phoneEl.selectionStart<PREFIX.length){ try{phoneEl.setSelectionRange(phoneEl.value.length,phoneEl.value.length);}catch(e){} } },0); });
+  phoneEl.addEventListener('keydown', function(e){
+    var atPrefix = phoneEl.selectionStart <= PREFIX.length && phoneEl.selectionEnd <= PREFIX.length;
+    if((e.key==='Backspace' || e.key==='Delete') && atPrefix){ e.preventDefault(); }
+  });
+
+  /* ─── RUT auto-formato ─── */
+  var rutEl = document.getElementById('frut');
+  rutEl.addEventListener('input', function(){
+    var d = rutEl.value.replace(/[^0-9kK]/g,'').toUpperCase();
+    if(d.length < 2){ rutEl.value = d; return; }
+    var body = d.slice(0,-1), dv = d.slice(-1), fmt = '';
+    while(body.length > 3){ fmt = '.'+body.slice(-3)+fmt; body = body.slice(0,-3); }
+    rutEl.value = body + fmt + '-' + dv;
+  });
+
+  /* ─── Navegación ─── */
+  function show(n){
+    cur = n;
+    steps.forEach(function(s,i){ s.className = 'step'+(i===n?' active':''); });
+    backBtn.style.display = n===0 ? 'none' : 'inline-block';
+    nextBtn.textContent   = n===STEPS-1 ? 'Confirmar cita' : 'Siguiente';
+    barFill.style.width   = ((n+1)/STEPS*100)+'%';
+    pageLbl.textContent   = (n+1)+' de '+STEPS;
+    if(n===1) buildDates();
+    if(n===3) buildSummary();
+    window.scrollTo({top:0, behavior:'smooth'});
+  }
+  window.navBack = function(){ if(cur>0) show(cur-1); };
+  window.navNext = function(){
+    if(!validate(cur)) return;
+    if(cur === STEPS-1){ submit(); return; }
+    show(cur+1);
+  };
+
+  /* ─── Validación ─── */
+  function validate(n){
+    if(n===0){
+      if(!cart.length){ showToast('Agrega al menos un tratamiento.'); return false; }
+      return true;
+    }
+    if(n===1){
+      if(!selDate){ showToast('Elige una fecha.'); return false; }
+      if(!selTime){ showToast('Elige una hora.'); return false; }
+      return true;
+    }
+    if(n===2){
+      var ok = true;
+      var nm = document.getElementById('fname'),
+          rt = document.getElementById('frut'),
+          ag = document.getElementById('fage'),
+          ph = document.getElementById('fphone'),
+          em = document.getElementById('femail');
+      [nm,rt,ag,ph,em].forEach(function(el){ el.classList.remove('err'); el.nextElementSibling.classList.remove('show'); });
+      if(!nm.value.trim() || nm.value.trim().length<3){ nm.classList.add('err'); nm.nextElementSibling.classList.add('show'); ok=false; }
+      if(rt.value.replace(/[^0-9kK]/g,'').length < 7){ rt.classList.add('err'); rt.nextElementSibling.classList.add('show'); ok=false; }
+      var age = parseInt(ag.value,10);
+      if(!ag.value || isNaN(age) || age<14 || age>99){ ag.classList.add('err'); ag.nextElementSibling.classList.add('show'); ok=false; }
+      if((ph.value||'').replace(/\D/g,'').length < 11){ ph.classList.add('err'); ph.nextElementSibling.classList.add('show'); ok=false; }
+      // Correo OPCIONAL: solo valida formato si escribieron algo
+      if(em.value.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em.value.trim())){ em.classList.add('err'); em.nextElementSibling.classList.add('show'); ok=false; }
+      if(!ok){ var first = [nm,rt,ag,ph,em].filter(function(e){ return e.classList.contains('err'); })[0]; if(first) first.scrollIntoView({block:'center', behavior:'smooth'}); }
+      return ok;
+    }
+    if(n===3){
+      var cb = document.getElementById('fconsentimiento');
+      var cw = document.getElementById('consent-wrap'), ce = document.getElementById('consent-err');
+      if(!cb.checked){ cw.classList.add('err-consent'); ce.classList.add('show'); return false; }
+      cw.classList.remove('err-consent'); ce.classList.remove('show');
+      return true;
+    }
+    return true;
+  }
+
+  /* ─── Resumen (paso 4) ─── */
+  function procLines(){
+    return cartGroups().map(function(g){
+      return (g.qty>1 ? g.qty+'× ' : '') + g.name + ' · ' + procMin(g.name) + ' min';
+    });
+  }
+  function buildSummary(){
+    var el = document.getElementById('summ');
+    if(!cart.length||!selDate||!selTime){ el.innerHTML=''; return; }
+    var rows = [
+      ['Tratamientos', procLines().join('<br>')],
+      ['Fecha',    DAYS[selDate.wd]+' '+selDate.dd+' '+selDate.mm],
+      ['Hora',     selTime+' hrs'],
+      ['Duración', fmtDur(cartTotalMin())],
+      ['Total',    cartTotalPrice()>0 ? fmt(cartTotalPrice()) : 'A convenir en consulta']
+    ];
+    el.innerHTML = rows.map(function(r){
+      var isProc = r[0]==='Tratamientos';
+      return '<div class="summ-row"><span class="summ-k">'+r[0]+'</span>'
+        +'<span class="summ-v'+(r[0]==='Total'?' price-highlight':'')+'">'+(isProc?r[1]:esc(r[1]))+'</span></div>';
+    }).join('');
+  }
+
+  /* ─── Reset del botón WhatsApp (fix: quedaba bloqueado entre reservas) ─── */
+  function resetWaButton(){
+    var wa = document.getElementById('wa-link');
+    wa.style.opacity = '';
+    wa.style.pointerEvents = '';
+    document.getElementById('espera-msg').classList.add('hide');
+  }
+
+  /* ─── Envío ─── */
+  function submit(){
+    var name  = document.getElementById('fname').value.trim();
+    var rut   = document.getElementById('frut').value.trim();
+    var age   = document.getElementById('fage').value.trim();
+    var phone = document.getElementById('fphone').value.trim();
+    var email = document.getElementById('femail').value.trim();
+
+    var groups   = cartGroups();
+    var procLabel = groups.map(function(g){ return (g.qty>1?g.qty+'× ':'')+g.name; }).join(' + ');
+    var totalMin = cartTotalMin();
+    var totalPrice = cartTotalPrice();
+    var procsArr = groups.map(function(g){ return { name:g.name, qty:g.qty, price:g.price, min:procMin(g.name) }; });
+
+    try{
+      var list = JSON.parse(localStorage.getItem('jcm_bookings')||'[]');
+      list.push({
+        id:'b'+Date.now(), name:name, rut:rut, age:age, phone:phone, email:email,
+        proc:procLabel, procs:procsArr, price:totalPrice, dur:totalMin+' min', durMin:totalMin,
+        fecha:selDate.date, date:selDate.date, wd:selDate.wd, dd:selDate.dd, mm:selDate.mm,
+        time:selTime, origen:'Web · agendar.html', status:'pendiente_pago',
+        ts:new Date().toISOString()
+      });
+      localStorage.setItem('jcm_bookings', JSON.stringify(list));
+      var appts = JSON.parse(localStorage.getItem('jcm_appts')||'[]');
+      appts.push({
+        id:'a'+Date.now(), name:name, rut:rut, phone:phone, email:email,
+        proc:procLabel, procs:procsArr, price:totalPrice, dur:totalMin+' min', durMin:totalMin,
+        fecha:selDate.date, time:selTime, status:'pendiente_pago',
+        day:Math.round((new Date(selDate.date+'T00:00:00')-new Date().setHours(0,0,0,0))/86400000),
+        origen:'Web · agendar.html', ts:new Date().toISOString()
+      });
+      localStorage.setItem('jcm_appts', JSON.stringify(appts));
+    }catch(e){}
+
+    // Multi-clínica: además del localStorage local, deja la reserva en Firestore de la clínica activa.
+    try{
+      if(window.JCSAAS && window.JCSAAS.enabled && CLINIC && window.JCSAAS.submitBooking){
+        window.JCSAAS.submitBooking({ name:name, rut:rut, phone:phone, email:email, proc:procLabel,
+          fecha:selDate.date, time:selTime, dur:totalMin+' min',
+          procs: procsArr.map(function(p){ return p.name+(p.qty>1?' x'+p.qty:''); }), source:'web' })
+          .then(function(){ try{ console.log('Reserva registrada en la clínica.'); }catch(_){ } })
+          .catch(function(err){
+            var code = (err && (err.code || err.message)) || 'error';
+            try{ console.error('submitBooking falló:', code, err); }catch(_){}
+            try{ showToast('Tu hora se envió por WhatsApp. (Aviso interno: ' + code + ')'); }catch(_){}
+          });
+      } else {
+        try{ console.warn('submitBooking no disponible', { enabled: !!(window.JCSAAS && window.JCSAAS.enabled), clinic: !!CLINIC }); }catch(_){}
+      }
+    }catch(e){ try{ console.error('submitBooking excepción', e); }catch(_){ } }
+
+    // Mensaje WhatsApp con todos los procedimientos + duración total
+    var clinicPhone = (CLINIC && CLINIC.wa) ? (''+CLINIC.wa).replace(/\D/g,'') : '56997880877';
+    var clinicName  = (CLINIC && CLINIC.name) ? CLINIC.name : 'JC Medical';
+    var msg = 'Hola '+clinicName+' 👋 Quiero confirmar mi reserva:\n\n'
+      +'👤 '+name+(rut ? ' · RUT '+rut : '')+'\n'
+      +'📅 '+DAYS[selDate.wd]+' '+selDate.dd+' '+selDate.mm+'\n'
+      +'🕐 '+selTime+' hrs\n'
+      +'💉 '+procLabel+'\n'
+      +'⏱ Duración aprox. '+fmtDur(totalMin)
+      +(totalPrice>0 ? '\n💵 '+fmt(totalPrice) : '')
+      +'\n\nAdjunto comprobante de transferencia.';
+    document.getElementById('wa-link').href =
+      'https://api.whatsapp.com/send?phone='+clinicPhone+'&text='+encodeURIComponent(msg);
+
+    var rows = [
+      ['Tratamientos', procLines().join('<br>')],
+      ['Fecha',  DAYS[selDate.wd]+' '+selDate.dd+' '+selDate.mm],
+      ['Hora',   selTime+' hrs'],
+      ['Duración', fmtDur(totalMin)],
+      ['Nombre', name],
+      ['Teléfono', phone]
+    ];
+    document.getElementById('ok-data').innerHTML = rows.map(function(r){
+      var isProc = r[0]==='Tratamientos';
+      return '<div class="ok-row"><span class="k">'+r[0]+'</span><span class="v">'+(isProc?r[1]:esc(r[1]))+'</span></div>';
+    }).join('');
+
+    resetWaButton(); // asegura que el botón esté activo para esta reserva
+    document.getElementById('app-steps').classList.add('hide');
+    document.getElementById('footer-nav').classList.add('hide');
+    document.getElementById('done').classList.remove('hide');
+    window.scrollTo({top:0, behavior:'smooth'});
+  }
+
+  /* ─── Upsell: segundo procedimiento con 15% descuento ─── */
+  var _upsellDiscount = false;
+  var _upsellShown = false; // solo se muestra una vez por sesión
+  var _upsellItems = []; // { name, price } items del catálogo para el selector
+
+  function buildUpsellItems(){
+    if(_upsellItems.length) return;
+    var D = window.JCDATA;
+    if(!D || !D.catalog) return;
+    D.catalog.forEach(function(sec){
+      sec.groups.forEach(function(g){
+        g.items.forEach(function(it){
+          var price = it.opts ? it.opts[0][1] : (it.price||0);
+          if(price>0) _upsellItems.push({ name:it.n, price:price });
+        });
+      });
+    });
+  }
+
+  function showUpsell(){
+    buildUpsellItems();
+    var cartNames = cart.map(function(c){ return c.name; });
+    var items = _upsellItems.filter(function(it){ return cartNames.indexOf(it.name) < 0; });
+    if(!items.length) return;
+    var sel = document.getElementById('upsell-sel');
+    sel.innerHTML = '<option value="">Elige un procedimiento…</option>'
+      + items.map(function(it){
+          return '<option value="'+esc(it.name)+'" data-price="'+it.price+'">'+esc(it.name)+'</option>';
+        }).join('');
+    document.getElementById('upsell-price-row').classList.add('hide');
+    document.getElementById('upsell-overlay').classList.remove('hide');
+  }
+
+  window.upsellUpdatePrice = function(){
+    var sel = document.getElementById('upsell-sel');
+    var opt = sel.options[sel.selectedIndex];
+    var price = parseInt(opt && opt.dataset.price, 10)||0;
+    var row = document.getElementById('upsell-price-row');
+    if(!price){ row.classList.add('hide'); return; }
+    var disc = Math.round(price*0.85/1000)*1000;
+    document.getElementById('upsell-original').textContent = fmt(price);
+    document.getElementById('upsell-discounted').textContent = fmt(disc);
+    row.classList.remove('hide');
+  };
+
+  window.upsellClose = function(){
+    document.getElementById('upsell-overlay').classList.add('hide');
+  };
+
+  window.upsellApply = function(){
+    var sel = document.getElementById('upsell-sel');
+    var opt = sel.options[sel.selectedIndex];
+    if(!opt || !opt.value){ showToast('Elige un procedimiento'); return; }
+    var name = opt.value;
+    var price = parseInt(opt.dataset.price,10)||0;
+    var disc = Math.round(price*0.85/1000)*1000;
+    upsellClose();
+    cart.push({ name:name, price:disc });
+    renderCart(); markCards();
+    showToast('15% de descuento aplicado ✓');
+  };
+
+  /* ─── Reiniciar ─── */
+  window.reinit = function(){
+    cart = []; selDate=null; selTime=null; cur=0; _upsellShown = false;
+    document.getElementById('fconsentimiento').checked = false;
+    ['fname','frut','fage','femail'].forEach(function(id){ document.getElementById(id).value=''; });
+    document.getElementById('fphone').value = PREFIX;
+    renderCart(); buildServices();
+    resetWaButton();   // ← fix: reactiva "Enviar comprobante por WhatsApp"
+    document.getElementById('app-steps').classList.remove('hide');
+    document.getElementById('footer-nav').classList.remove('hide');
+    document.getElementById('done').classList.add('hide');
+    show(0);
+  };
+
+  /* ─── Mostrar espera al tocar WA (solo deshabilita para ESTA reserva) ─── */
+  document.getElementById('wa-link').addEventListener('click', function(){
+    var waBtn = document.getElementById('wa-link');
+    setTimeout(function(){
+      document.getElementById('espera-msg').classList.remove('hide');
+      waBtn.style.opacity = '0.55';
+      waBtn.style.pointerEvents = 'none';
+    }, 800);
+  });
+
+  /* ─── Iniciar ─── */
+  buildServices();
+  show(0);
+})();
+</script>
+</body>
+</html>

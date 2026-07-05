@@ -1,0 +1,25 @@
+_tests/
+propuestas/
+*.DS_Store
+node_modules/
+.claude/
+.vercel/
+.impeccable/
+.env
+.env.*
+!.env.example
+# Secretos: service account de Firebase (NUNCA subir)
+serviceAccount*.json
+**/serviceAccount*.json
+*.serviceaccount.json
+*service*account*.json
+*credential*.json
+*.pem
+*.p12
+*.key
+
+# Prototipos de diseño (no publicar) y documentos/PDF sueltos
+designs/
+Documentos-Legales/
+Medique-Resumen.pdf
+/assets/logoof *.png

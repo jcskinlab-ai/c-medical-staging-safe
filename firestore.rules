@@ -1,0 +1,136 @@
+rules_version = '2';
+// ════════════════════════════════════════════════════════════════════════
+// Reglas de seguridad de Firestore para el SaaS multi-clínica de JC Medical.
+// Pega TODO esto en: Firebase Console → Firestore Database → pestaña "Reglas".
+// Aíslan los datos: cada clínica solo puede leer/escribir lo suyo.
+// ════════════════════════════════════════════════════════════════════════
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() { return request.auth != null; }
+
+    // clinicId al que pertenece el usuario logueado (según su doc en users/).
+    function myClinic() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.clinicId;
+    }
+
+    // SUPER-ADMIN (dueño del SaaS): preferimos el custom claim (seteado con Admin SDK,
+    // no se puede auto-asignar). Se MANTIENEN los correos de los dueños como respaldo para
+    // no quedar bloqueados de /admin. Quita la lista de correos SOLO cuando confirmes que
+    // ambas cuentas tienen el claim. Setear claim: auth.setCustomUserClaims(uid,{superAdmin:true}).
+    function isSuper() {
+      return signedIn() && (request.auth.token.superAdmin == true
+                            || request.auth.token.email == 'medique.cl@gmail.com'
+                            || request.auth.token.email == 'jc.skinlab@gmail.com');
+    }
+
+    // Plan activo: active, comp o trial vigente (validado en servidor, no en cliente).
+    function clinicActive(clinicId) {
+      let c = get(/databases/$(database)/documents/clinics/$(clinicId)).data;
+      return c.plan == 'active' || c.plan == 'comp'
+        || (c.plan == 'trial' && c.trialEnds > request.time.toMillis());
+    }
+
+    // Mapeo usuario → clínica (uid, clinicId, rol). Cada quien gestiona el suyo.
+    match /users/{uid} {
+      allow read:          if signedIn() && request.auth.uid == uid;
+      allow create:        if signedIn() && request.auth.uid == uid
+                           && request.resource.data.clinicId is string;
+      // En update, el clinicId NO puede cambiar: evita que un usuario se reasigne a otra clínica
+      // y obtenga acceso a sus datos (myClinic() lee este campo).
+      allow update:        if signedIn() && request.auth.uid == uid
+                           && request.resource.data.clinicId == resource.data.clinicId;
+      // Solo el super-admin puede eliminar el mapeo (al borrar una clínica desde la consola).
+      allow delete:        if isSuper();
+    }
+
+    // Perfil de la clínica (nombre, marca, plan, prueba).
+    match /clinics/{clinicId} {
+      // Al registrarse, la clínica nace PENDIENTE (no puede auto-asignarse un plan pagado ni de
+      // prueba): se obliga plan='pending'. El super-admin la aprueba desde /admin (pasa a 'trial').
+      allow create: if signedIn()
+                    && request.resource.data.ownerUid == request.auth.uid
+                    && clinicId == request.resource.data.id
+                    && request.resource.data.plan == 'pending';
+      // La clínica puede leer y editar su perfil/marca…
+      allow read:   if isSuper() || (signedIn()
+                    && (resource.data.ownerUid == request.auth.uid || myClinic() == clinicId));
+      // El super-admin puede cambiar el plan/prueba; la clínica puede editar su perfil/marca
+      // pero NO su propio plan/prueba/propietario (así nadie se auto-activa gratis para siempre).
+      allow update: if isSuper() || (signedIn()
+                    && (resource.data.ownerUid == request.auth.uid || myClinic() == clinicId)
+                    && request.resource.data.plan      == resource.data.plan
+                    && request.resource.data.trialEnds == resource.data.trialEnds
+                    && request.resource.data.ownerUid  == resource.data.ownerUid);
+      // Solo el super-admin puede eliminar una clínica (consola /admin).
+      allow delete: if isSuper();
+    }
+
+    // Datos de cada clínica (agenda, pacientes, caja, inventario, etc.), aislados.
+    // La clínica debe tener plan activo o trial vigente (validado aquí, no solo en el cliente).
+    match /tenants/{clinicId}/kv/{key} {
+      allow read, write: if signedIn()
+                         && myClinic() == clinicId
+                         && (isSuper() || clinicActive(clinicId));
+    }
+
+    // Perfil público de la clínica (marca, dirección, horarios, precios) para la
+    // app de pacientes y la reserva. Lectura libre; solo la clínica lo escribe.
+    match /tenants/{clinicId}/public/{doc} {
+      allow read:  if true;
+      allow write: if signedIn() && myClinic() == clinicId;
+    }
+
+    // Reservas que dejan los pacientes (sin login): pueden CREAR una reserva en su
+    // clínica, pero no leer/editar las de otros. La clínica (logueada) las gestiona.
+    match /tenants/{clinicId}/bookings/{id} {
+      allow create: if request.resource.data.keys().hasOnly(['name','phone','email','proc','fecha','time','dur','procs','note','createdAt','source'])
+                    && request.resource.data.name is string
+                    && request.resource.data.name.size() < 120
+                    && request.resource.data.phone is string
+                    && request.resource.data.phone.size() < 30
+                    && (!('note' in request.resource.data) || request.resource.data.note.size() < 1000)
+                    && (!('proc' in request.resource.data) || request.resource.data.proc.size() < 200)
+                    && request.resource.data.createdAt is number
+                    && request.resource.data.createdAt >= request.time.toMillis() - 300000
+                    && request.resource.data.createdAt <= request.time.toMillis() + 300000;
+      allow read, update, delete: if signedIn() && myClinic() == clinicId;
+    }
+
+    // Colaboraciones que envían influencers/marcas desde el formulario público (sin login).
+    match /tenants/{clinicId}/collabs/{id} {
+      allow create: if request.resource.data.keys().hasOnly(['name','email','phone','kind','ig','tiktok','ciudad','redPrincipal','reach','views','audiencia','ofrece','proc','message','createdAt'])
+                    && request.resource.data.name is string
+                    && request.resource.data.name.size() < 120
+                    && (!('message' in request.resource.data) || request.resource.data.message.size() < 2000)
+                    && (!('ofrece' in request.resource.data) || request.resource.data.ofrece.size() < 1000)
+                    && request.resource.data.createdAt is number
+                    && request.resource.data.createdAt >= request.time.toMillis() - 300000
+                    && request.resource.data.createdAt <= request.time.toMillis() + 300000;
+      allow read, update, delete: if signedIn() && myClinic() == clinicId;
+    }
+
+    // Usuarios registrados en la app de la clínica (sin login al crear/actualizar).
+    // El doc ID es el teléfono normalizado (solo dígitos) → idempotente.
+    match /tenants/{clinicId}/appusers/{doc} {
+      allow create, update: if request.resource.data.keys().hasOnly(
+                        ['name','phone','email','points','created','createdAt']
+                    ) && request.resource.data.size() < 1000;
+      allow read, delete: if signedIn() && myClinic() == clinicId;
+    }
+
+    // Reseñas que dejan los pacientes desde el formulario público (sin login).
+    match /tenants/{clinicId}/reviews/{id} {
+      allow create: if request.resource.data.keys().hasOnly(['name','phone','stars','comment','createdAt'])
+                    && request.resource.data.stars is number
+                    && request.resource.data.stars >= 1 && request.resource.data.stars <= 5
+                    && request.resource.data.name is string
+                    && request.resource.data.name.size() < 120
+                    && (!('comment' in request.resource.data) || request.resource.data.comment.size() < 2000)
+                    && request.resource.data.createdAt is number
+                    && request.resource.data.createdAt >= request.time.toMillis() - 300000
+                    && request.resource.data.createdAt <= request.time.toMillis() + 300000;
+      allow read, update, delete: if signedIn() && myClinic() == clinicId;
+    }
+  }
+}

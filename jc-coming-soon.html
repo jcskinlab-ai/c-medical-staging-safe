@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>JC Medical · Medicina Estética Talca</title>
+<meta name="description" content="Medicina estética en Talca. Toxina botulínica, ácido hialurónico y bioestimulación con criterio clínico. Próximamente en línea.">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#54707F">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    font-family: 'Jost', -apple-system, sans-serif;
+    background: #F5F2EC;
+    color: #1A1A14;
+    -webkit-font-smoothing: antialiased;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100dvh;
+    padding: 40px 24px;
+    overflow: hidden;
+  }
+
+  /* Fondo sutil */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 50% at 20% 20%, rgba(84,112,127,.07) 0%, transparent 70%),
+      radial-gradient(ellipse 50% 60% at 80% 80%, rgba(84,112,127,.05) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .wrap {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    max-width: 480px;
+    animation: fadeUp .9s cubic-bezier(.22,1,.36,1) both;
+  }
+
+  .mark {
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    background: #54707F;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 28px;
+    box-shadow: 0 8px 28px -8px rgba(84,112,127,.45);
+  }
+
+  .brand {
+    font-family: 'Marcellus', serif;
+    font-size: clamp(28px, 8vw, 38px);
+    font-weight: 400;
+    letter-spacing: -.01em;
+    color: #1A1A14;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .brand em {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-weight: 300;
+    color: #54707F;
+  }
+
+  .sub {
+    font-family: 'Jost', sans-serif;
+    font-size: 10px;
+    font-weight: 400;
+    letter-spacing: .22em;
+    text-transform: uppercase;
+    color: #8A8674;
+    margin-bottom: 48px;
+  }
+
+  .divider {
+    width: 36px;
+    height: 1px;
+    background: rgba(20,20,15,.15);
+    margin-bottom: 32px;
+  }
+
+  .headline {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(22px, 6vw, 30px);
+    font-weight: 300;
+    line-height: 1.35;
+    color: #1A1A14;
+    margin-bottom: 16px;
+  }
+
+  .body {
+    font-family: 'Jost', sans-serif;
+    font-size: 14px;
+    font-weight: 300;
+    line-height: 1.7;
+    color: #5C5A50;
+    max-width: 360px;
+    margin-bottom: 48px;
+  }
+
+  .cta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: center;
+    margin-bottom: 56px;
+  }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #54707F;
+    color: #F5F2EC;
+    font-family: 'Jost', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    text-decoration: none;
+    padding: 14px 24px;
+    border-radius: 999px;
+    transition: opacity .25s;
+  }
+  .btn-primary:hover { opacity: .85; }
+
+  .btn-ghost {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: transparent;
+    color: #54707F;
+    font-family: 'Jost', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    text-decoration: none;
+    padding: 14px 24px;
+    border-radius: 999px;
+    border: 1px solid rgba(84,112,127,.35);
+    transition: background .25s, border-color .25s;
+  }
+  .btn-ghost:hover { background: rgba(84,112,127,.07); border-color: rgba(84,112,127,.6); }
+
+  .footer {
+    font-family: 'Jost', sans-serif;
+    font-size: 11px;
+    font-weight: 300;
+    color: #8A8674;
+    letter-spacing: .05em;
+  }
+  .footer a { color: inherit; text-decoration: none; border-bottom: 1px solid currentColor; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: none; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- Marca -->
+  <div class="mark">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="rgba(245,242,236,.9)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 2a4 4 0 0 1 4 4c0 3-4 6-4 6s-4-3-4-6a4 4 0 0 1 4-4z"/>
+      <path d="M12 12v10M8 18h8"/>
+    </svg>
+  </div>
+
+  <div class="brand">JC <em>Medical</em></div>
+  <div class="sub">SKINLAB · Talca</div>
+
+  <div class="divider"></div>
+
+  <h1 class="headline">Estamos preparando<br>algo para ti.</h1>
+  <p class="body">
+    Nuestra plataforma de medicina estética está en sus últimos ajustes.
+    Muy pronto podrás agendar tu evaluación, revisar tratamientos
+    y acceder a tu ficha en línea.
+  </p>
+
+  <div class="cta-row">
+    <a href="https://wa.me/56945677955?text=Hola%2C%20quiero%20agendar%20una%20evaluaci%C3%B3n%20en%20JC%20Medical" target="_blank" rel="noopener" class="btn-primary">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="rgba(245,242,236,.9)"><path d="M19.05 4.91A9.82 9.82 0 0 0 12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.02z"/></svg>
+      Agendar por WhatsApp
+    </a>
+    <a href="https://www.instagram.com/jcskinlab" target="_blank" rel="noopener" class="btn-ghost">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#54707F" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".8" fill="#54707F" stroke="none"/></svg>
+      @jcskinlab
+    </a>
+  </div>
+
+  <p class="footer">Talca, Chile &nbsp;·&nbsp; <a href="mailto:contacto@medique.cl">contacto@medique.cl</a></p>
+
+</div>
+</body>
+</html>
