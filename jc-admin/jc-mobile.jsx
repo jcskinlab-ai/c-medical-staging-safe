@@ -1224,8 +1224,375 @@ function OverlayShell({ T, title, onBack, children }) {
   );
 }
 
+/* ─── Panel móvil enterprise exacto a referencias ─── */
+const REF_APPTS = [
+  { time:"10:30", name:"Christian Martínez Muñoz", proc:"Evaluación general", dur:"30 min", status:"confirmada" },
+  { time:"11:00", name:"Karen Sofía Baeza Arellano", proc:"Quemadores de grasa localizada", dur:"45 min", status:"confirmada" },
+  { time:"11:45", name:"Mabel Baeza Arellano", proc:"Quemadores de grasa localizada", dur:"45 min", status:"pendiente" },
+  { time:"12:30", name:"Rubén Albornoz Roco", proc:"Botox 3 zonas", dur:"30 min", status:"no_asistio" },
+  { time:"13:00", name:"Emilia Buchón Vergara", proc:"Quemadores de grasa localizada", dur:"60 min", status:"confirmada" },
+  { time:"14:00", name:"Nathaly Rojas Troncoso", proc:"Botox Full Face (8 zonas)", dur:"45 min", status:"confirmada" }
+];
+const REF_HOURS = ["08:00","09:00","10:00","11:00","11:45","12:30","13:00","14:00","15:00","16:00","17:00"];
+const REF_BLUE = "#2F7BFF";
+const REF_TEXT = "#F6FAFF";
+const REF_MUTED = "rgba(235,244,255,.76)";
+const REF_FAINT = "rgba(235,244,255,.56)";
+
+function RefIcon({ type, size=24 }) {
+  const common = { width:size, height:size, viewBox:"0 0 24 24", fill:"none", stroke:"currentColor", strokeWidth:"1.9", strokeLinecap:"round", strokeLinejoin:"round" };
+  if (type==="menu") return <svg {...common}><path d="M4 7h16M4 12h16M4 17h16"/></svg>;
+  if (type==="bell") return <svg {...common}><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>;
+  if (type==="calendar") return <svg {...common}><rect x="3" y="4" width="18" height="17" rx="3"/><path d="M8 2v4M16 2v4M3 10h18"/></svg>;
+  if (type==="check") return <svg {...common}><rect x="5" y="4" width="14" height="16" rx="3"/><path d="m8.8 12.2 2.1 2.1 4.3-4.6"/></svg>;
+  if (type==="clock") return <svg {...common}><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>;
+  if (type==="bars") return <svg {...common}><path d="M5 20V10M10 20V5M15 20v-8M20 20V8"/></svg>;
+  if (type==="plus") return <svg {...common}><path d="M12 5v14M5 12h14"/></svg>;
+  if (type==="users") return <svg {...common}><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.7M16 3.3a4 4 0 0 1 0 7.4"/></svg>;
+  if (type==="more") return <svg {...common}><circle cx="5" cy="12" r="1.4" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.4" fill="currentColor" stroke="none"/><circle cx="19" cy="12" r="1.4" fill="currentColor" stroke="none"/></svg>;
+  if (type==="filter") return <svg {...common}><path d="M4 7h16M7 12h10M10 17h4"/><circle cx="8" cy="7" r="1.8"/><circle cx="16" cy="12" r="1.8"/><circle cx="12" cy="17" r="1.8"/></svg>;
+  if (type==="search") return <svg {...common}><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>;
+  if (type==="user") return <svg {...common}><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>;
+  if (type==="chev") return <svg {...common}><path d="m9 18 6-6-6-6"/></svg>;
+  if (type==="back") return <svg {...common}><path d="m15 18-6-6 6-6"/></svg>;
+  if (type==="x") return <svg {...common}><path d="M18 6 6 18M6 6l12 12"/></svg>;
+  if (type==="flame") return <svg {...common}><path d="M12 22c4 0 7-2.8 7-6.8 0-3.4-2.4-5.7-4.2-7.6-.9-.9-1.7-1.9-2-3.1-.1-.5-.7-.7-1.1-.3C9.4 6.2 8 8.3 8 11c-1.3-.5-2.1-1.6-2.5-2.5-.2-.4-.8-.4-1 0A9.2 9.2 0 0 0 3 15.2C3 19.2 6.3 22 12 22Z"/><path d="M12 18c1.6 0 2.8-1.1 2.8-2.6 0-1.3-.9-2.1-1.6-2.9-.4-.4-.7-.7-.8-1.2-1 .8-1.7 1.8-1.7 3-.6-.3-1-.7-1.2-1.1-.4.7-.6 1.4-.6 2.2 0 1.5 1.3 2.6 3.1 2.6Z"/></svg>;
+  if (type==="hourglass") return <svg {...common}><path d="M6 2h12M6 22h12M7 2c0 5 5 6 5 10s-5 5-5 10M17 2c0 5-5 6-5 10s5 5 5 10"/></svg>;
+  if (type==="note") return <svg {...common}><path d="M8 3h7l4 4v14H8a3 3 0 0 1-3-3V6a3 3 0 0 1 3-3Z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></svg>;
+  return null;
+}
+
+function RefGlass({ children, style, onClick, as="div" }) {
+  const Comp = onClick ? "button" : as;
+  return (
+    <Comp onClick={onClick} style={{ position:"relative", overflow:"hidden", background:"linear-gradient(180deg, rgba(255,255,255,.13), rgba(255,255,255,.045) 38%, rgba(255,255,255,.015)), rgba(27,61,106,.32)", backdropFilter:"blur(30px) saturate(1.8) brightness(1.06)", WebkitBackdropFilter:"blur(30px) saturate(1.8) brightness(1.06)", border:"1px solid rgba(255,255,255,.18)", boxShadow:"0 18px 60px rgba(0,0,0,.28), inset 0 1px 0 rgba(255,255,255,.18)", color:REF_TEXT, fontFamily:SF, textAlign:"left", padding:0, ...style }}>
+      <span style={{ position:"absolute", inset:0, pointerEvents:"none", background:"linear-gradient(180deg, rgba(255,255,255,.13), rgba(255,255,255,.035) 34%, transparent 70%)" }} />
+      <span style={{ position:"relative", zIndex:1, display:"block" }}>{children}</span>
+    </Comp>
+  );
+}
+
+function RefStatusBadge({ status }) {
+  const map = {
+    confirmada: { label:"CONFIRMADA", color:"#DCEBFF", bg:"rgba(54,122,229,.46)", border:"rgba(112,164,255,.34)" },
+    pendiente: { label:"PENDIENTE", color:"#FFE27A", bg:"rgba(112,84,32,.64)", border:"rgba(255,205,73,.3)" },
+    no_asistio: { label:"NO ASISTIÓ", color:"#FFC6C8", bg:"rgba(151,55,70,.62)", border:"rgba(255,115,129,.34)" }
+  };
+  const s = map[status] || map.confirmada;
+  return <span style={{ flexShrink:0, padding:"8px 11px", minWidth:92, textAlign:"center", borderRadius:8, background:s.bg, border:"1px solid "+s.border, color:s.color, fontSize:11, fontWeight:700, letterSpacing:"-.01em" }}>{s.label}</span>;
+}
+
+function RefStatusColor(status) {
+  if (status === "pendiente") return "#FFC94D";
+  if (status === "no_asistio") return "#FF5B73";
+  return "#58D68B";
+}
+
+function RefStatusBar() {
+  const item = (color, text) => <span style={{ display:"flex", alignItems:"center", gap:8, whiteSpace:"nowrap" }}><i style={{ width:10, height:10, borderRadius:"50%", background:color, boxShadow:"0 0 12px "+color }} />{text}</span>;
+  return (
+    <RefGlass style={{ borderRadius:15, padding:"12px 14px", fontSize:14, color:REF_TEXT }}>
+      <span style={{ display:"flex", justifyContent:"space-between", alignItems:"center", gap:8, whiteSpace:"nowrap" }}>
+        {item("#57D887", "Hoy: 6 confirmadas")}{item("#FFC23D", "1 pendiente")}{item("#FF5167", "1 no asistió")}
+      </span>
+    </RefGlass>
+  );
+}
+
+function RefTopStatus() {
+  return (
+    <div style={{ height:30, display:"flex", alignItems:"center", justifyContent:"space-between", padding:"0 30px", color:"#fff", fontSize:18, fontWeight:500, textShadow:"0 1px 14px rgba(0,0,0,.3)" }}>
+      <span>9:41</span>
+      <div style={{ width:116, height:34, borderRadius:22, background:"#030509", boxShadow:"inset 0 1px 3px rgba(255,255,255,.08)" }} />
+      <span style={{ display:"flex", alignItems:"center", gap:6 }}>
+        <svg width="22" height="14" viewBox="0 0 24 14" fill="currentColor"><rect x="1" y="8" width="3" height="5" rx="1"/><rect x="6" y="6" width="3" height="7" rx="1"/><rect x="11" y="3" width="3" height="10" rx="1"/><rect x="16" y="1" width="3" height="12" rx="1"/></svg>
+        <svg width="18" height="14" viewBox="0 0 24 16" fill="none" stroke="currentColor" strokeWidth="2"><path d="M2 5c5.8-4 14.2-4 20 0M6 9c3.5-2.3 8.5-2.3 12 0M10 13c1.2-.8 2.8-.8 4 0"/></svg>
+        <svg width="25" height="13" viewBox="0 0 28 14" fill="none" stroke="currentColor" strokeWidth="1.7"><rect x="1" y="2" width="23" height="10" rx="2"/><path d="M26 5v4"/><rect x="3.5" y="4.2" width="18" height="5.6" rx="1" fill="currentColor" stroke="none"/></svg>
+      </span>
+    </div>
+  );
+}
+
+function RefHeader({ view, setView }) {
+  if (view === "new") {
+    return (
+      <div style={{ display:"grid", gridTemplateColumns:"44px 1fr 44px", alignItems:"center", padding:"18px 12px 22px" }}>
+        <button onClick={()=>setView("home")} style={{ background:"none", border:0, color:REF_TEXT, height:44 }}><RefIcon type="back" size={31} /></button>
+        <div style={{ textAlign:"center", fontSize:26, fontWeight:700, color:REF_TEXT }}>Nueva cita</div>
+        <button onClick={()=>setView("home")} style={{ background:"none", border:0, color:REF_TEXT, height:44 }}><RefIcon type="x" size={31} /></button>
+      </div>
+    );
+  }
+  if (view === "agenda") {
+    return (
+      <div style={{ display:"grid", gridTemplateColumns:"44px 1fr 44px", alignItems:"center", padding:"18px 12px 20px" }}>
+        <button style={{ background:"none", border:0, color:REF_TEXT, height:44 }}><RefIcon type="menu" size={31} /></button>
+        <div style={{ textAlign:"center", fontSize:27, fontWeight:750, color:REF_TEXT }}>Agenda</div>
+        <button style={{ background:"none", border:0, color:REF_TEXT, height:44 }}><RefIcon type="filter" size={27} /></button>
+      </div>
+    );
+  }
+  return (
+    <div style={{ display:"grid", gridTemplateColumns:"44px 60px 1fr 44px", alignItems:"center", gap:12, padding:"18px 12px 20px" }}>
+      <button style={{ background:"none", border:0, color:REF_TEXT, height:44 }}><RefIcon type="menu" size={31} /></button>
+      <div style={{ width:54, height:54, borderRadius:16, display:"grid", placeItems:"center", background:"linear-gradient(135deg,#6F91FF,#2867EC)", color:"#fff", fontSize:28, fontWeight:700, boxShadow:"0 14px 30px rgba(36,103,236,.36)" }}>M</div>
+      <div style={{ minWidth:0 }}>
+        <div style={{ fontSize:19, fontWeight:750, color:REF_TEXT, letterSpacing:"-.03em" }}>Medique · JC Medical</div>
+        <div style={{ fontSize:15, color:REF_MUTED, marginTop:3 }}>Panel móvil</div>
+      </div>
+      <button style={{ position:"relative", background:"none", border:0, color:REF_TEXT, height:44 }}>
+        <RefIcon type="bell" size={29} />
+        <span style={{ position:"absolute", top:1, right:0, width:22, height:22, borderRadius:"50%", display:"grid", placeItems:"center", background:REF_BLUE, color:"#fff", fontSize:12, fontWeight:800, boxShadow:"0 7px 16px rgba(47,123,255,.45)" }}>3</span>
+      </button>
+    </div>
+  );
+}
+
+function RefAppointmentRow({ a, compact=false }) {
+  const color = RefStatusColor(a.status);
+  return (
+    <RefGlass style={{ borderRadius:13, minHeight:compact?66:68 }}>
+      <span style={{ display:"grid", gridTemplateColumns:"80px 1fr auto", alignItems:"center", minHeight:compact?66:68 }}>
+        <span style={{ height:"100%", display:"grid", placeItems:"center", borderLeft:"4px solid "+color, borderRight:"1px solid rgba(255,255,255,.14)", color, fontSize:17, fontWeight:700 }}>{a.time}</span>
+        <span style={{ minWidth:0, padding:"0 15px" }}>
+          <strong style={{ display:"block", color:REF_TEXT, fontSize:17, lineHeight:1.15, whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis" }}>{a.name}</strong>
+          <span style={{ display:"block", color:REF_MUTED, fontSize:12.5, marginTop:5, whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis" }}>{a.proc} · {a.dur}</span>
+        </span>
+        <span style={{ paddingRight:13 }}><RefStatusBadge status={a.status} /></span>
+      </span>
+    </RefGlass>
+  );
+}
+
+function RefBottomNav({ view, setView }) {
+  const items = [
+    ["home","Citas","calendar"],
+    ["agenda","Agenda","calendar"],
+    ["patients","Pacientes","users"],
+    ["reports","Reportes","bars"],
+    ["more","Más","more"]
+  ];
+  const active = view === "agenda" ? "agenda" : "home";
+  return (
+    <div style={{ position:"sticky", bottom:0, padding:"10px 8px calc(12px + env(safe-area-inset-bottom,0px))", zIndex:20 }}>
+      <RefGlass style={{ borderRadius:28, padding:"7px 8px" }}>
+        <span style={{ display:"grid", gridTemplateColumns:"repeat(5,1fr)", gap:4 }}>
+          {items.map(([key,label,icon]) => {
+            const on = active === key;
+            return (
+              <button key={key} onClick={()=> key==="agenda" ? setView("agenda") : key==="home" ? setView("home") : null}
+                style={{ height:64, border:0, borderRadius:19, background:on?"linear-gradient(180deg, rgba(69,137,255,.58), rgba(42,107,223,.25))":"transparent", color:on?"#fff":REF_MUTED, display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", gap:5, fontFamily:SF, fontSize:12.5, fontWeight:on?750:500, boxShadow:on?"0 12px 24px rgba(47,123,255,.25), inset 0 0 0 1px rgba(140,185,255,.24)":"none" }}>
+                <RefIcon type={icon} size={26} />{label}
+              </button>
+            );
+          })}
+        </span>
+      </RefGlass>
+      <div style={{ width:134, height:5, borderRadius:999, background:"rgba(255,255,255,.9)", margin:"10px auto 0" }} />
+    </div>
+  );
+}
+
+function RefDashboard({ setView }) {
+  const kpis = [
+    ["calendar","Citas hoy","12","↑ 20% vs ayer"],
+    ["check","Confirmadas","8","67% del total"],
+    ["clock","Pendientes","4","33% del total"],
+    ["bars","Tasa de ocupación","89%","↑ 12% vs ayer"]
+  ];
+  const action = (icon, label, onClick, primary) => (
+    <button onClick={onClick} style={{ border:0, borderRadius:17, background:"rgba(255,255,255,.055)", color:REF_TEXT, minHeight:84, fontFamily:SF, fontSize:14, display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", gap:8, boxShadow:"inset 0 0 0 1px rgba(255,255,255,.11)" }}>
+      <span style={{ width:44, height:44, borderRadius:16, display:"grid", placeItems:"center", background:primary?"linear-gradient(135deg,#57A2FF,#255BE9)":"transparent", color:"#fff", boxShadow:primary?"0 16px 30px rgba(47,123,255,.35)":"none" }}><RefIcon type={icon} size={primary?29:32} /></span>
+      {label}
+    </button>
+  );
+  return (
+    <div style={{ padding:"0 9px 0", display:"flex", flexDirection:"column", gap:13 }}>
+      <div style={{ display:"flex", alignItems:"center", gap:17, padding:"0 6px" }}>
+        <img src="/assets/jc-pro.jpg?v=1" alt="" style={{ width:72, height:72, borderRadius:"50%", objectFit:"cover", objectPosition:"50% 22%", border:"1px solid rgba(255,255,255,.34)", boxShadow:"0 12px 26px rgba(0,0,0,.25)" }} />
+        <div>
+          <div style={{ fontSize:29, fontWeight:750, color:REF_TEXT, letterSpacing:"-.04em" }}>Hola, Dr. Martínez</div>
+          <div style={{ fontSize:21, color:REF_MUTED, marginTop:3 }}>Viernes, 4 de julio</div>
+        </div>
+      </div>
+      <div style={{ display:"grid", gridTemplateColumns:"repeat(4,1fr)", gap:9 }}>
+        {kpis.map(([icon,label,num,sub])=>(
+          <RefGlass key={label} style={{ borderRadius:17, height:116, padding:"11px 4px 10px", textAlign:"center" }}>
+            <span style={{ height:"100%", display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"space-between" }}>
+              <span style={{ color:"rgba(225,239,255,.86)" }}><RefIcon type={icon} size={22} /></span>
+              <span style={{ color:REF_TEXT, fontSize:13, fontWeight:650, minHeight:28, display:"flex", alignItems:"center", justifyContent:"center", lineHeight:1.1 }}>{label}</span>
+              <span style={{ color:"#fff", fontSize:35, fontWeight:500, lineHeight:1, letterSpacing:"-.04em" }}>{num}</span>
+              <span style={{ color:sub.indexOf("↑")===0 ? "#7DDEA8" : REF_MUTED, fontSize:11 }}>{sub}</span>
+            </span>
+          </RefGlass>
+        ))}
+      </div>
+      <RefStatusBar />
+      <RefGlass style={{ borderRadius:23, padding:9 }}>
+        <span style={{ display:"grid", gridTemplateColumns:"repeat(4,1fr)", gap:10 }}>
+          {action("plus","Nueva cita",()=>setView("new"),true)}
+          {action("users","Pacientes")}
+          {action("clock","Bloquear horario")}
+          {action("bars","Reportes")}
+        </span>
+      </RefGlass>
+      <div>
+        <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", margin:"4px 3px 12px" }}>
+          <h2 style={{ margin:0, color:REF_TEXT, fontSize:22, fontWeight:750, letterSpacing:"-.03em" }}>Próximas citas</h2>
+          <button onClick={()=>setView("agenda")} style={{ border:"1px solid rgba(255,255,255,.18)", background:"rgba(255,255,255,.07)", color:"#fff", borderRadius:12, padding:"9px 13px", fontFamily:SF, fontSize:13, fontWeight:700 }}>Ver agenda ›</button>
+        </div>
+        <div style={{ display:"flex", flexDirection:"column", gap:10 }}>
+          {REF_APPTS.slice(0,5).map(a => <RefAppointmentRow key={a.time} a={a} />)}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function RefAgenda({ setView }) {
+  const dates = [["Vie","4"],["Sáb","5"],["Dom","6"],["Lun","7"],["Mar","8"],["Mié","9"],["Jue","10"]];
+  const yFor = (time) => {
+    const [h,m] = time.split(":").map(Number);
+    return (h - 8) * 64 + (m || 0) / 60 * 64;
+  };
+  return (
+    <div style={{ padding:"0 14px 0", display:"flex", flexDirection:"column", gap:17 }}>
+      <RefGlass style={{ borderRadius:20, padding:4 }}>
+        <span style={{ display:"grid", gridTemplateColumns:"1fr 1fr" }}>
+          <button style={{ border:0, borderRadius:18, height:61, background:"linear-gradient(180deg,#3F8BFF,#215BDE)", color:"#fff", fontFamily:SF, fontSize:19, fontWeight:750 }}>Día</button>
+          <button style={{ border:0, borderRadius:18, height:61, background:"transparent", color:REF_TEXT, fontFamily:SF, fontSize:19 }}>Mes</button>
+        </span>
+      </RefGlass>
+      <div style={{ display:"grid", gridTemplateColumns:"44px repeat(7,1fr) 44px", gap:8, alignItems:"center" }}>
+        <button style={{ height:43, border:0, borderRadius:12, background:"rgba(255,255,255,.08)", color:"#fff" }}><RefIcon type="back" size={26} /></button>
+        {dates.map(([d,n],i)=>(
+          <button key={n} style={{ height:67, borderRadius:13, border:"1px solid "+(i===0?"rgba(99,159,255,.5)":"rgba(255,255,255,.13)"), background:i===0?"linear-gradient(180deg,#438EFF,#215CDE)":"rgba(255,255,255,.055)", color:"#fff", fontFamily:SF }}>
+            <span style={{ display:"block", fontSize:13, opacity:.84 }}>{d}</span>
+            <span style={{ display:"block", fontSize:27, fontWeight:i===0?800:500, marginTop:2 }}>{n}</span>
+          </button>
+        ))}
+        <button style={{ height:43, border:0, borderRadius:12, background:"rgba(255,255,255,.08)", color:"#fff", transform:"rotate(180deg)" }}><RefIcon type="back" size={26} /></button>
+      </div>
+      <RefStatusBar />
+      <div style={{ position:"relative", height:710, paddingBottom:20 }}>
+        <div style={{ position:"absolute", left:84, top:12, bottom:28, width:1, background:"rgba(255,255,255,.14)" }} />
+        {REF_HOURS.map((h,i)=>(
+          <div key={h} style={{ position:"absolute", left:0, right:0, top:12+i*64, height:1, background:"rgba(255,255,255,.08)" }}>
+            <span style={{ position:"absolute", left:0, top:-12, color:REF_TEXT, fontSize:18 }}>{h}</span>
+            <span style={{ position:"absolute", left:78, top:-4, width:9, height:9, borderRadius:"50%", border:"1px solid rgba(255,255,255,.16)", background:"rgba(28,61,105,.85)" }} />
+          </div>
+        ))}
+        {REF_APPTS.map((a)=>(
+          <RefGlass key={a.time} style={{ position:"absolute", left:104, right:0, top:Math.max(78, yFor(a.time)-10), height:73, borderRadius:11, borderLeft:"3px solid "+RefStatusColor(a.status) }}>
+            <span style={{ height:"100%", display:"grid", gridTemplateColumns:"1fr auto", alignItems:"center", gap:10, padding:"0 12px 0 20px" }}>
+              <span style={{ minWidth:0 }}>
+                <strong style={{ display:"block", fontSize:18, color:REF_TEXT, whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis" }}>{a.name}</strong>
+                <span style={{ display:"block", color:REF_MUTED, fontSize:13, marginTop:6, whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis" }}>{a.proc} · {a.dur}</span>
+              </span>
+              <RefStatusBadge status={a.status} />
+            </span>
+          </RefGlass>
+        ))}
+        <button onClick={()=>setView("new")} style={{ position:"absolute", right:0, bottom:30, width:86, height:86, borderRadius:"50%", border:"1px solid rgba(255,255,255,.25)", background:"linear-gradient(180deg,#5AA9FF,#1E5BDF)", color:"#fff", boxShadow:"0 22px 44px rgba(0,0,0,.36), 0 0 26px rgba(47,123,255,.32)" }}><RefIcon type="plus" size={48} /></button>
+      </div>
+    </div>
+  );
+}
+
+function RefNewAppointment({ setView }) {
+  const field = (icon, text, right) => (
+    <RefGlass style={{ borderRadius:13, height:68 }}>
+      <span style={{ height:"100%", display:"flex", alignItems:"center", gap:14, padding:"0 20px", color:REF_TEXT, fontSize:19 }}>
+        <span style={{ color:"rgba(230,242,255,.86)" }}>{icon}</span>
+        <span style={{ flex:1, minWidth:0, whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis" }}>{text}</span>
+        {right || <RefIcon type="chev" size={22} />}
+      </span>
+    </RefGlass>
+  );
+  const label = (t) => <div style={{ color:REF_TEXT, fontSize:20, fontWeight:500, margin:"19px 0 9px" }}>{t}</div>;
+  return (
+    <div style={{ padding:"0 16px 0" }}>
+      <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr 1fr", alignItems:"start", margin:"6px 70px 22px", position:"relative" }}>
+        <div style={{ position:"absolute", top:19, left:"17%", right:"17%", height:1, background:"rgba(255,255,255,.18)" }} />
+        {["Paciente","Detalles","Confirmar"].map((t,i)=>(
+          <div key={t} style={{ position:"relative", zIndex:1, textAlign:"center", color:i===0?REF_TEXT:REF_MUTED }}>
+            <span style={{ margin:"0 auto 11px", width:42, height:42, borderRadius:"50%", display:"grid", placeItems:"center", background:i===0?"linear-gradient(180deg,#4A91FF,#235EE4)":"rgba(255,255,255,.16)", fontSize:19, fontWeight:800, boxShadow:i===0?"0 12px 22px rgba(47,123,255,.32)":"none" }}>{i+1}</span>
+            <span style={{ fontSize:16 }}>{t}</span>
+          </div>
+        ))}
+      </div>
+      {label("Buscar paciente")}
+      {field(<RefIcon type="search" size={28} />, "Buscar por nombre, RUT o teléfono", <RefIcon type="users" size={24} />)}
+      <RefGlass style={{ borderRadius:14, height:88, marginTop:20 }}>
+        <span style={{ height:"100%", display:"flex", alignItems:"center", gap:18, padding:"0 20px" }}>
+          <span style={{ width:58, height:58, borderRadius:"50%", display:"grid", placeItems:"center", background:"linear-gradient(180deg,#4A91FF,#235EE4)", color:"#fff" }}><RefIcon type="user" size={30} /></span>
+          <span style={{ flex:1, minWidth:0 }}>
+            <strong style={{ display:"block", color:REF_TEXT, fontSize:19, whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis" }}>Karen Sofía Baeza Arellano</strong>
+            <span style={{ color:REF_MUTED, fontSize:16, marginTop:5, display:"block" }}>21.365.478-6 · +56 9 1234 5678</span>
+          </span>
+          <RefIcon type="chev" size={26} />
+        </span>
+      </RefGlass>
+      {label("Procedimiento")}
+      {field(<span style={{ width:38, height:38, borderRadius:9, display:"grid", placeItems:"center", background:"rgba(47,123,255,.24)" }}><RefIcon type="flame" size={22} /></span>, "Quemadores de grasa localizada")}
+      {label("Fecha")}
+      {field(<RefIcon type="calendar" size={28} />, "Viernes, 4 de julio de 2026")}
+      <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:32 }}>
+        <div>{label("Hora de inicio")}{field(<RefIcon type="clock" size={28} />, "11:00")}</div>
+        <div>{label("Duración")}{field(<RefIcon type="hourglass" size={28} />, "45 min")}</div>
+      </div>
+      {label("Notas (opcional)")}
+      {field(<RefIcon type="note" size={25} />, "Ej. Control, seguimiento, evaluación...", <span style={{ color:REF_MUTED }}>0/200</span>)}
+      <RefGlass style={{ borderRadius:13, height:76, marginTop:27 }}>
+        <span style={{ height:"100%", display:"flex", alignItems:"center", gap:18, padding:"0 22px", fontSize:17 }}>
+          <span style={{ width:42, height:42, borderRadius:"50%", display:"grid", placeItems:"center", background:"linear-gradient(180deg,#4A91FF,#235EE4)", color:"#fff", fontWeight:900 }}>i</span>
+          <span style={{ width:1, height:38, background:"rgba(255,255,255,.16)" }} />
+          <span style={{ color:REF_MUTED }}>Pago pendiente de evaluación: <b style={{ color:"#82B9FF" }}>$15.000</b></span>
+        </span>
+      </RefGlass>
+      <button style={{ marginTop:28, width:"100%", height:70, border:0, borderRadius:14, background:"linear-gradient(180deg,#4A91FF,#235EE4)", color:"#fff", fontFamily:SF, fontSize:21, fontWeight:800, boxShadow:"0 22px 42px rgba(35,94,228,.28)" }}>Continuar</button>
+      <button onClick={()=>setView("home")} style={{ width:"100%", height:58, border:0, background:"transparent", color:"#fff", fontFamily:SF, fontSize:19, fontWeight:650 }}>Cancelar</button>
+    </div>
+  );
+}
+
+function MediqueEnterpriseMobile({ T }) {
+  const [view, setView] = useState("home");
+  const mainRef = useRef(null);
+  useEffect(() => {
+    if (mainRef.current) mainRef.current.scrollTop = 0;
+  }, [view]);
+  const bg = {
+    minHeight:"100dvh",
+    backgroundImage:"linear-gradient(180deg, rgba(5,18,38,.16), rgba(5,18,38,.38) 44%, rgba(5,18,38,.68)), url('/assets/everest-mobile.jpg?v=7')",
+    backgroundSize:"cover",
+    backgroundPosition:"center top",
+    backgroundRepeat:"no-repeat",
+    backgroundColor:"#07182E",
+    display:"flex",
+    justifyContent:"center",
+    fontFamily:SF,
+    color:REF_TEXT
+  };
+  return (
+    <div style={bg}>
+      <div className="jc-scroll" style={{ width:"100%", maxWidth:430, height:"100dvh", display:"flex", flexDirection:"column", background:"linear-gradient(180deg, rgba(16,54,101,.14), rgba(7,28,58,.34))", boxShadow:"0 0 80px rgba(0,0,0,.28)", overflow:"hidden" }}>
+        <div style={{ padding:"calc(10px + env(safe-area-inset-top,0px)) 10px 0" }}>
+          <RefTopStatus />
+          <RefHeader view={view} setView={setView} />
+        </div>
+        <main ref={mainRef} className="jc-scroll" style={{ flex:1, paddingBottom:8, overflowY:"auto", overflowX:"hidden" }}>
+          {view === "agenda" ? <RefAgenda setView={setView} /> : view === "new" ? <RefNewAppointment setView={setView} /> : <RefDashboard setView={setView} />}
+        </main>
+        <RefBottomNav view={view} setView={setView} />
+      </div>
+    </div>
+  );
+}
+
 /* ─── Shell principal ─── */
 function MobileShell({ T, D, onLogout }) {
+  return <MediqueEnterpriseMobile T={T} />;
   const [tab, setTab] = useState("citas");
   const [overlay, setOverlay] = useState(null); // null | "pacientes" | "reportes" | {type:"ficha", id}
   const [apptSheet, setApptSheet] = useState(null); // appt abierta en la hoja de acciones
