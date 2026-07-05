@@ -1337,7 +1337,7 @@ function RefHeader({ view, setView }) {
       <button style={{ background:"none", border:0, color:REF_TEXT, height:44 }}><RefIcon type="menu" size={31} /></button>
       <div style={{ width:54, height:54, borderRadius:16, display:"grid", placeItems:"center", background:"linear-gradient(135deg,#6F91FF,#2867EC)", color:"#fff", fontSize:28, fontWeight:700, boxShadow:"0 14px 30px rgba(36,103,236,.36)" }}>M</div>
       <div style={{ minWidth:0 }}>
-        <div style={{ fontSize:19, fontWeight:750, color:REF_TEXT, letterSpacing:"-.03em" }}>Medique · JC Medical</div>
+        <div style={{ fontSize:18.5, fontWeight:750, color:REF_TEXT, letterSpacing:"-.03em", whiteSpace:"nowrap", overflow:"hidden", textOverflow:"ellipsis" }}>Medique · JC Medical</div>
         <div style={{ fontSize:15, color:REF_MUTED, marginTop:3 }}>Panel móvil</div>
       </div>
       <button style={{ position:"relative", background:"none", border:0, color:REF_TEXT, height:44 }}>
@@ -1575,8 +1575,9 @@ function MediqueEnterpriseMobile({ T }) {
     color:REF_TEXT
   };
   return (
-    <div style={bg}>
-      <div className="jc-scroll" style={{ width:"100%", maxWidth:430, height:"100dvh", display:"flex", flexDirection:"column", background:"linear-gradient(180deg, rgba(16,54,101,.14), rgba(7,28,58,.34))", boxShadow:"0 0 80px rgba(0,0,0,.28)", overflow:"hidden" }}>
+    <div className="medique-stage" style={bg}>
+      <div className="medique-phone-shell">
+      <div className="medique-screen jc-scroll">
         <div style={{ padding:"calc(10px + env(safe-area-inset-top,0px)) 10px 0" }}>
           <RefTopStatus />
           <RefHeader view={view} setView={setView} />
@@ -1585,6 +1586,7 @@ function MediqueEnterpriseMobile({ T }) {
           {view === "agenda" ? <RefAgenda setView={setView} /> : view === "new" ? <RefNewAppointment setView={setView} /> : <RefDashboard setView={setView} />}
         </main>
         <RefBottomNav view={view} setView={setView} />
+      </div>
       </div>
     </div>
   );
@@ -1820,6 +1822,8 @@ function MobileAdmin() {
     sans:"'Jost',sans-serif", serif:"'Marcellus',serif", navBg:"rgba(245,242,236,.96)"
   }));
   const D = window.JCDATA;
+  const previewOnly = !(window.JCSAAS && window.JCSAAS.enabled) && new URLSearchParams(location.search).get("auth") !== "1";
+  if (previewOnly) return <MobileShell T={T} D={D} onLogout={()=>{}} />;
   const authed0 = !!(window.jcmAdminHasPass&&window.jcmAdminHasPass()&&window.jcmAdminHasSession&&window.jcmAdminHasSession());
   const [authed, setAuthed] = useState(authed0);
   if (!authed) return <LoginScreen T={T} onAuth={()=>setAuthed(true)} />;

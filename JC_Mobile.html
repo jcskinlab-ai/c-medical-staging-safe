@@ -17,6 +17,14 @@
   #root{height:100%}
   button{font-family:inherit}input,select,textarea{font-family:inherit}
   select{-webkit-appearance:none}
+  .medique-stage{min-height:100dvh;display:flex;justify-content:center;font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','SF Pro Text','Segoe UI',system-ui,Roboto,sans-serif;color:#F6FAFF}
+  .medique-phone-shell{width:100%;height:100dvh;max-width:430px;background:#07182E;overflow:hidden}
+  .medique-screen{width:100%;height:100%;display:flex;flex-direction:column;background:linear-gradient(180deg,rgba(16,54,101,.14),rgba(7,28,58,.34));box-shadow:0 0 80px rgba(0,0,0,.28);overflow:hidden}
+  @media (min-width:700px){
+    .medique-stage{align-items:center;padding:28px 0}
+    .medique-phone-shell{width:454px;height:956px;border:12px solid #06090f;border-radius:62px;box-shadow:0 34px 100px rgba(0,0,0,.58),0 0 0 2px rgba(255,255,255,.2),inset 0 0 0 1px rgba(255,255,255,.16)}
+    .medique-screen{border-radius:48px}
+  }
   @keyframes jcFade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
   @keyframes jcPop{0%{transform:scale(.7);opacity:0}70%{transform:scale(1.06)}100%{transform:scale(1);opacity:1}}
   @keyframes jcDrawerIn{from{transform:translateX(-100%)}to{transform:none}}
@@ -45,6 +53,6 @@
 <script src="jcm_saas_config.js?v=7"></script>
 <script src="jcm_saas.js?v=28"></script>
 
-<script src="/dist/jc-mobile.js?v=27"></script>
+<script src="/dist/jc-mobile.js?v=28"></script>
 </body>
 </html>
